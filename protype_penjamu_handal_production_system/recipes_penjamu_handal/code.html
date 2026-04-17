@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipes Library | Penjamu Handal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#fea619",
+                        "on-tertiary-fixed": "#002113",
+                        "background": "#fdf9e9",
+                        "on-tertiary-container": "#31c98f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#b0f0d6",
+                        "error": "#ba1a1a",
+                        "primary": "#003527",
+                        "surface-container": "#f2eede",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "outline-variant": "#bfc9c3",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#e6e3d3",
+                        "on-background": "#1c1c13",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface": "#fdf9e9",
+                        "inverse-primary": "#95d3ba",
+                        "inverse-surface": "#323126",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#004f34",
+                        "on-surface-variant": "#404944",
+                        "secondary": "#855300",
+                        "on-surface": "#1c1c13",
+                        "on-secondary-container": "#684000",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#ece8d9",
+                        "surface-tint": "#2b6954",
+                        "surface-container-highest": "#e6e3d3",
+                        "secondary-fixed": "#ffddb8",
+                        "on-primary-fixed": "#002117",
+                        "primary-container": "#064e3b",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fdf9e9",
+                        "primary-fixed-dim": "#95d3ba",
+                        "outline": "#707974",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary-container": "#80bea6",
+                        "inverse-on-surface": "#f5f1e1",
+                        "tertiary": "#003623",
+                        "surface-dim": "#dedacb",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "on-secondary-fixed": "#2a1700",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#f8f4e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fdf9e9;
+        }
+        h1, h2, h3 {
+            font-family: 'Manrope', sans-serif;
+        }
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .asymmetric-card:nth-child(even) {
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- SideNavBar Shell -->
+<nav class="h-full w-72 flex flex-col fixed left-0 top-0 bg-[#f8f4e4] dark:bg-emerald-950 z-50">
+<div class="px-8 py-10">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-fixed" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div>
+<div class="text-xl font-bold tracking-tight text-[#064e3b] dark:text-emerald-400">Penjamu Handal</div>
+<div class="text-[10px] uppercase tracking-widest text-on-surface/40 font-bold">Digital Apothecary</div>
+</div>
+</div>
+<div class="space-y-1">
+<a class="text-[#1c1c13]/60 dark:text-emerald-100/60 px-6 py-4 flex items-center gap-3 hover:bg-[#fdf9e9] dark:hover:bg-emerald-800/50 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="text-[#1c1c13]/60 dark:text-emerald-100/60 px-6 py-4 flex items-center gap-3 hover:bg-[#fdf9e9] dark:hover:bg-emerald-800/50 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-medium">Inventory</span>
+</a>
+<a class="text-[#1c1c13]/60 dark:text-emerald-100/60 px-6 py-4 flex items-center gap-3 hover:bg-[#fdf9e9] dark:hover:bg-emerald-800/50 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span class="font-medium">Production</span>
+</a>
+<!-- Active Navigation: Recipes -->
+<a class="text-[#064e3b] dark:text-emerald-300 font-bold border-l-4 border-[#fea619] bg-[#fdf9e9]/50 dark:bg-emerald-800/30 px-6 py-4 flex items-center gap-3 group" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span>Recipes</span>
+</a>
+<a class="text-[#1c1c13]/60 dark:text-emerald-100/60 px-6 py-4 flex items-center gap-3 hover:bg-[#fdf9e9] dark:hover:bg-emerald-800/50 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-medium">Reports</span>
+</a>
+<a class="text-[#1c1c13]/60 dark:text-emerald-100/60 px-6 py-4 flex items-center gap-3 hover:bg-[#fdf9e9] dark:hover:bg-emerald-800/50 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</div>
+</div>
+<div class="mt-auto p-8">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/10 transition-all active:scale-95">
+<span class="material-symbols-outlined">add</span>
+<span>New Batch</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-72 min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-8 py-6 sticky top-0 z-40 bg-[#fdf9e9]/70 backdrop-blur-md border-b border-[#064e3b]/10">
+<div class="flex items-center gap-6 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-2 bg-surface-container-high border-none rounded-full focus:ring-1 focus:ring-secondary text-sm" placeholder="Search formulas..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-8 w-px bg-outline-variant/30 mx-2"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right hidden lg:block">
+<div class="text-xs font-bold text-primary leading-tight">A. Sutisna</div>
+<div class="text-[10px] text-on-surface/60">Master Herbalist</div>
+</div>
+<img alt="Production Manager Avatar" class="w-10 h-10 rounded-full border-2 border-surface-container-highest" data-alt="portrait of a professional production manager in a clean white lab coat with a warm smile and blurred workshop background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgm7fUpZNkKQx9kO7xWT_Be08AzavPFZ_HqwS7fQ3h1bfCU5Oloe7ubQy6QpW1OcZ4TVDJheiQ1tvIEz56URVFXPKVm_17HtpuQf5x64hhqbYG7qKiY5qxeBqqU8brfjqKBvoL39coWYT-kB2mRPw0taYcYZ_Hpms5PhsAjlD2DypzjzWd0h6ngzyKzUFFyT5ZkyAvv_JAbPC1zPBOCYlDfyQDC2QAZma0Ulrlxny_CWeKbx3iBMzVazw6VIYc6H4itd-111B5LUjt"/>
+</div>
+</div>
+</header>
+<div class="p-12 max-w-7xl mx-auto">
+<!-- Hero Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+<div class="max-w-2xl">
+<h1 class="text-5xl font-extrabold text-primary tracking-tight mb-4">Recipes library</h1>
+<p class="text-lg text-on-surface-variant leading-relaxed">
+                        The core intelligence of Penjamu Handal. Manage your ancestral formulas with laboratory precision. Ensure every batch of Jamu meets the highest standards of potency and purity.
+                    </p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-xl font-bold flex items-center gap-3 transition-transform hover:-translate-y-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span>Add New Recipe</span>
+</button>
+</div>
+<!-- Categories / Filter Pills -->
+<div class="flex flex-wrap gap-3 mb-10">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full font-semibold text-sm">All Formulas</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-medium text-sm hover:bg-surface-container-highest transition-colors">Vitality</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-medium text-sm hover:bg-surface-container-highest transition-colors">Digestive</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-medium text-sm hover:bg-surface-container-highest transition-colors">Immunity</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-medium text-sm hover:bg-surface-container-highest transition-colors">Recovery</button>
+</div>
+<!-- Recipes Bento-ish Grid -->
+<div class="recipe-grid">
+<!-- Card 1: Kunyit Asam -->
+<div class="asymmetric-card bg-surface-container-lowest rounded-xl overflow-hidden group hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-outline-variant/20 flex flex-col">
+<div class="h-56 overflow-hidden relative">
+<img alt="Kunyit Asam preparation" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="vibrant overhead shot of fresh turmeric roots and tamarind pods on a rustic wooden board with scattered herbal leaves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfeYiKdj1P7ZoRIfQlu7ChjCxGVnXiFJUqed6Z2wB_oXAtoAJI0--z5LdIdWLJIXr0Nlpped_c5mXoJ_jxQJ56K93jY0jcbv9f54j4hqALGuxxNl7hyZrdUhpzMWE1sJ_mGngSYghLWEiYOoS7Z8-wHQ3KdxXCy3Sf7theW-8NTSdGYpX4viYUpX2WTvUDbCz3p-1PRZHKTfoC4ta28_4oif2yoYU1ACxtOY5-l0OMUm5yTQkwLJ3NEcVbZYdW66dBwqP2C3sVhliw"/>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Immunity</span>
+</div>
+</div>
+<div class="p-8 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-bold text-primary">Kunyit Asam</h3>
+<div class="flex items-center text-secondary font-bold text-xs uppercase tracking-tighter">
+<span class="material-symbols-outlined text-sm mr-1">speed</span> Easy
+                            </div>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 leading-relaxed">A traditional blend for detoxification and brightened skin vitality. Highly sought for retail.</p>
+<div class="mt-auto">
+<div class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest mb-3">Main Ingredients</div>
+<div class="flex flex-wrap gap-2 mb-8">
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Turmeric</span>
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Tamarind</span>
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Palm Sugar</span>
+</div>
+<button class="w-full border border-primary/20 text-primary py-3 rounded-lg font-bold text-sm hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center gap-2">
+                                View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Beras Kencur -->
+<div class="asymmetric-card bg-surface-container-lowest rounded-xl overflow-hidden group hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-outline-variant/20 flex flex-col">
+<div class="h-56 overflow-hidden relative">
+<img alt="Beras Kencur ingredients" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="close up of raw white rice and sand ginger roots with aromatic spices on a clean neutral background in soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKY2m5JNCY6YaIQYKcxcxoq2C1olSA57A26a_H5d17QM6snO3ezHMUMmi1h4fRIg5sWWjGwcxjx55_n_OTELlv7wXm-XiTFZEIoqRGEJtAC1Fn8ThjCvLpCqkpHMhCYxasSJ7Vk8kJPhWGaUO2GdpJN3qkgBzY4Dz2oZToQ6OY3veZPPVSuR0NF8dp9T7xaXhpAwiotDOyGM_bKao0eeTk4eDXDhccVtA0A6TH7cHonq1zA25xanQZ7mMEj0JOj7yFY2MvkD8RK7QW"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Vitality</span>
+</div>
+</div>
+<div class="p-8 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-bold text-primary">Beras Kencur</h3>
+<div class="flex items-center text-on-error-container font-bold text-xs uppercase tracking-tighter">
+<span class="material-symbols-outlined text-sm mr-1">speed</span> Advanced
+                            </div>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 leading-relaxed">Formulated for muscle recovery and stamina boost. Requires 48-hour fermentation cycle.</p>
+<div class="mt-auto">
+<div class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest mb-3">Main Ingredients</div>
+<div class="flex flex-wrap gap-2 mb-8">
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Sand Ginger</span>
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Rice Grain</span>
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Ginger</span>
+</div>
+<button class="w-full border border-primary/20 text-primary py-3 rounded-lg font-bold text-sm hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center gap-2">
+                                View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Temulawak Curcuma -->
+<div class="asymmetric-card bg-surface-container-lowest rounded-xl overflow-hidden group hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-outline-variant/20 flex flex-col">
+<div class="h-56 overflow-hidden relative">
+<img alt="Temulawak roots" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="aesthetic arrangement of sliced curcuma roots showing orange centers with fresh lime wedges and honey dipper on a textured stone surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASJEwLV0PNcfQC8tv_nupwterehmf82iAAuLgYJReFu-Dm3rzngmIgOtlE3luhAAB-DMo2O0uIFmYYiF2LGZTv51-mhgoNUHtf3imn3zIBhODdo68Tg2QDnTdOyY9iDudhVy7ye93kPaAa-JSK05tvy1Z5O46hhZD8uAyxj-lS-JTa4FxHUp6gASkefCDt2HWibPCw8rBs4CsjDiz2vB4oGL9YKOaTu9QdjRUpF21M9lgtlI2NDDQDohqGrpgJcTxL1FqZFOeBmnLz"/>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Digestive</span>
+</div>
+</div>
+<div class="p-8 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-bold text-primary">Temulawak Gold</h3>
+<div class="flex items-center text-on-secondary-fixed-variant font-bold text-xs uppercase tracking-tighter">
+<span class="material-symbols-outlined text-sm mr-1">speed</span> Medium
+                            </div>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 leading-relaxed">Liver protection and appetite enhancement. Uses high-concentrate extraction method.</p>
+<div class="mt-auto">
+<div class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest mb-3">Main Ingredients</div>
+<div class="flex flex-wrap gap-2 mb-8">
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Curcuma</span>
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Wild Honey</span>
+<span class="px-2 py-1 bg-surface-container-low rounded text-xs font-medium border border-outline-variant/10">Lime</span>
+</div>
+<button class="w-full border border-primary/20 text-primary py-3 rounded-lg font-bold text-sm hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center gap-2">
+                                View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4: New Recipe Placeholder -->
+<div class="asymmetric-card border-2 border-dashed border-outline-variant/40 rounded-xl flex flex-col items-center justify-center p-12 group cursor-pointer hover:bg-surface-container-high/30 transition-all">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl text-outline">add_circle</span>
+</div>
+<h3 class="text-xl font-bold text-primary mb-2">Create New Formula</h3>
+<p class="text-xs text-on-surface-variant text-center px-4 leading-relaxed">Start drafting a new herbal combination for laboratory testing.</p>
+</div>
+</div>
+<!-- Secondary Content Section: Production Stats -->
+<div class="mt-24 bg-surface-container-low rounded-3xl p-12 flex flex-col lg:flex-row gap-12 items-center">
+<div class="flex-1">
+<span class="text-secondary font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Batch Optimization</span>
+<h2 class="text-4xl font-bold text-primary mb-6 leading-tight">Master formula analytics for consistent potency.</h2>
+<p class="text-on-surface-variant mb-8 leading-relaxed">Our apothecary intelligence monitors ingredient volatility across seasons, automatically adjusting your base recipes to maintain therapeutic consistency.</p>
+<div class="grid grid-cols-3 gap-8">
+<div>
+<div class="text-3xl font-extrabold text-primary">12</div>
+<div class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest mt-1">Active Formulas</div>
+</div>
+<div>
+<div class="text-3xl font-extrabold text-primary">850L</div>
+<div class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest mt-1">Monthly Yield</div>
+</div>
+<div>
+<div class="text-3xl font-extrabold text-primary">99%</div>
+<div class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest mt-1">Batch Success</div>
+</div>
+</div>
+</div>
+<div class="flex-1 relative h-80 w-full overflow-hidden rounded-2xl">
+<img alt="Artisanal jamu bottling" class="w-full h-full object-cover" data-alt="minimalist aesthetic of glass apothecary bottles being filled with amber-colored herbal liquid in a sterile modern laboratory environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp90l5BzjkEKGIU2KUnuUc5ffdRkFbls76LfKBiGA5Nj2GBaJEN-r2O7fWsKj7P5XBQKo9HRAnDN78FBqNo3Wr9gRkLm2wSWfqe9TwanEwZKK3cRjjvDAvp2xwWcXL3J8LiWtXN_oECDrfrz0LRbtgR4rIvGQ6fNLfsyNffOeFVXwPBb-d6j5NX7S60W2dLXiu0pqQ97BBltrooJSJ815awuBpEiKfQUT3aqiuUGH7tY3UNVLZ_L9ZGu6UJC6tAf3wk8DxLGF5LSyK"/>
+<div class="absolute inset-0 bg-primary/20 mix-blend-multiply"></div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

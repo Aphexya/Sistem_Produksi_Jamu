@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#fea619",
+                    "on-tertiary-fixed": "#002113",
+                    "background": "#fdf9e9",
+                    "on-tertiary-container": "#31c98f",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#b0f0d6",
+                    "error": "#ba1a1a",
+                    "primary": "#003527",
+                    "surface-container": "#f2eede",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "outline-variant": "#bfc9c3",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e6e3d3",
+                    "on-background": "#1c1c13",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface": "#fdf9e9",
+                    "inverse-primary": "#95d3ba",
+                    "inverse-surface": "#323126",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#004f34",
+                    "on-surface-variant": "#404944",
+                    "secondary": "#855300",
+                    "on-surface": "#1c1c13",
+                    "on-secondary-container": "#684000",
+                    "on-primary-fixed-variant": "#0b513d",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#ece8d9",
+                    "surface-tint": "#2b6954",
+                    "surface-container-highest": "#e6e3d3",
+                    "secondary-fixed": "#ffddb8",
+                    "on-primary-fixed": "#002117",
+                    "primary-container": "#064e3b",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#fdf9e9",
+                    "primary-fixed-dim": "#95d3ba",
+                    "outline": "#707974",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-primary-container": "#80bea6",
+                    "inverse-on-surface": "#f5f1e1",
+                    "tertiary": "#003623",
+                    "surface-dim": "#dedacb",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "on-secondary-fixed": "#2a1700",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-container-low": "#f8f4e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope", "sans-serif"],
+                    "body": ["Plus Jakarta Sans", "sans-serif"],
+                    "label": ["Plus Jakarta Sans", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fdf9e9;
+            color: #1c1c13;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .asymmetric-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+        }
+        @media (max-width: 1024px) {
+            .asymmetric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- SideNavBar (Authority: JSON + Design System) -->
+<nav class="h-full w-72 flex flex-col fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant/15 z-50">
+<div class="px-8 py-10">
+<h1 class="text-xl font-bold tracking-tight text-primary font-headline">Penjamu Handal</h1>
+<p class="text-xs tracking-widest text-on-surface-variant font-medium mt-1">DIGITAL APOTHECARY</p>
+</div>
+<div class="flex-1 flex flex-col gap-1 px-2">
+<a class="text-on-background/60 px-6 py-4 flex items-center gap-3 hover:bg-surface-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="text-on-background/60 px-6 py-4 flex items-center gap-3 hover:bg-surface-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">inventory_2</span>
+<span class="font-medium">Inventory</span>
+</a>
+<a class="text-on-background/60 px-6 py-4 flex items-center gap-3 hover:bg-surface-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">precision_manufacturing</span>
+<span class="font-medium">Production</span>
+</a>
+<a class="text-on-background/60 px-6 py-4 flex items-center gap-3 hover:bg-surface-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">menu_book</span>
+<span class="font-medium">Recipes</span>
+</a>
+<a class="text-on-background/60 px-6 py-4 flex items-center gap-3 hover:bg-surface-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl">analytics</span>
+<span class="font-medium">Reports</span>
+</a>
+<!-- Active State Navigation -->
+<a class="text-primary font-bold border-l-4 border-secondary-container bg-surface-container-high/50 px-6 py-4 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</div>
+<div class="p-8">
+<button class="w-full py-4 px-6 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-95 transition-opacity">
+<span class="material-symbols-outlined text-lg">add</span>
+<span>New Batch</span>
+</button>
+<div class="mt-8 flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" data-alt="Portrait of a professional production manager with a clean lab coat and focused expression in a botanical lab" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkKWo8v9RwsoJ6spUh0jZ2gkBDgRBus8zzNRxnXt_CPSnwLiyY-_WmATdsoWp9TGy9qir-6_QZH6vMUKwoOo5qU-zAHjyd83CIODIlTNB9UocbRIkbiUPncT4Iw2iSVNzobDuFAxi--V3PtBLrKA8-3pBpWKSALbLBHr3YjeGhKL6Akk4iRcNC5ZUxg4f0JsJpVi0ZQRF0NYmmaIF-ygk-1JTruqdzdYVabRvX-Y0rlzOHoTdYZK_e4WdchqODPkWcDv3P2pe48zTP"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold text-primary truncate">Production Manager</p>
+<p class="text-xs text-on-surface-variant truncate">Master Herbalist</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-72 min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-surface/70 backdrop-blur-md border-b border-outline-variant/15 px-8 py-5 flex justify-between items-center">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-highest rounded-md border-none focus:ring-1 focus:ring-secondary-container w-64 text-sm font-body" placeholder="Search parameters..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary-container rounded-full border-2 border-surface"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Page Header -->
+<div class="px-12 pt-12 pb-6">
+<h2 class="text-4xl font-headline font-extrabold text-primary tracking-tight">Console Configuration</h2>
+<p class="text-on-surface-variant font-body mt-2">Refine your apothecary's digital pulse and team hierarchy.</p>
+</div>
+<!-- Settings Navigation Tabs -->
+<div class="px-12 mb-10">
+<div class="flex gap-8 border-b border-outline-variant/15">
+<button class="pb-4 border-b-2 border-primary text-primary font-bold text-sm tracking-wide">PROFILE</button>
+<button class="pb-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors font-medium text-sm tracking-wide">SYSTEM THRESHOLDS</button>
+<button class="pb-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors font-medium text-sm tracking-wide">USER MANAGEMENT</button>
+</div>
+</div>
+<div class="px-12 pb-20 space-y-12">
+<!-- Profile Section -->
+<section class="asymmetric-grid items-start">
+<div class="bg-surface-container-low p-10 rounded-xl space-y-8 shadow-sm">
+<div class="flex items-center gap-8">
+<div class="relative group">
+<img class="w-28 h-28 rounded-xl object-cover ring-4 ring-surface-container-highest" data-alt="Detailed professional headshot of a mature herbal specialist in an apothecary setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBviXIw8us1rcbtUPykJeMHVuxOzOZpPCXdUIMI9SoDL_9qo56R4-PmMMGiYyy9U7XUh9A04gfLuY31Af0LQT9czpiKSGYHSollgSqTcgeqkW1vxJbP9deEebiIHZ11_CiQrSghujGjTUlkiZelKK8J9bd6mexBWFt9gPQdi6VGDBWGaQjRGTOEPF6XcGu4IrKkR5ckq8i1yW8ErQ9D--GcPYWip_ebqPPid9hAakAtLYygou1m4R5mKh7fy9JzwxE_i-kuQx04OG-A"/>
+<button class="absolute -bottom-2 -right-2 bg-secondary text-on-secondary p-2 rounded-lg shadow-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</button>
+</div>
+<div>
+<h3 class="text-2xl font-headline font-bold text-primary">Master Alchemist</h3>
+<p class="text-on-surface-variant">Senior Production Lead • Member since Jan 2022</p>
+</div>
+</div>
+<form class="grid grid-cols-2 gap-6 pt-4">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1">Full Name</label>
+<input class="w-full bg-surface-container-highest border-none rounded-md px-4 py-3 focus:ring-1 focus:ring-primary transition-all font-body" type="text" value="Ahmad Sulaiman"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1">Email Address</label>
+<input class="w-full bg-surface-container-highest border-none rounded-md px-4 py-3 focus:ring-1 focus:ring-primary transition-all font-body" type="email" value="ahmad.s@penjamuhandal.id"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1">Work ID</label>
+<input class="w-full bg-surface-container-highest border-none rounded-md px-4 py-3 focus:ring-1 focus:ring-primary transition-all font-body" readonly="" type="text" value="PH-2022-004"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1">Phone Number</label>
+<input class="w-full bg-surface-container-highest border-none rounded-md px-4 py-3 focus:ring-1 focus:ring-primary transition-all font-body" type="text" value="+62 811 2345 6789"/>
+</div>
+<div class="col-span-2 pt-4">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-md font-bold text-sm tracking-wide hover:shadow-lg transition-all">SAVE CHANGES</button>
+</div>
+</form>
+</div>
+<div class="space-y-6">
+<div class="bg-primary text-on-primary p-8 rounded-xl relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="text-lg font-headline font-bold mb-2">Digital Signature</h4>
+<p class="text-on-primary-container text-sm leading-relaxed opacity-90 mb-6">Your signature is required for batch release authorization and final quality checks.</p>
+<div class="h-32 bg-white/10 rounded-lg flex items-center justify-center border-2 border-dashed border-white/20">
+<span class="material-symbols-outlined text-4xl opacity-30">draw</span>
+</div>
+</div>
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-secondary/20 blur-3xl rounded-full"></div>
+</div>
+</div>
+</section>
+<!-- System Thresholds Section -->
+<section class="space-y-8 pt-6">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="text-2xl font-headline font-bold text-primary">System Thresholds</h3>
+<p class="text-on-surface-variant font-body">Configure automated alerts for stock and production health.</p>
+</div>
+<span class="text-xs font-bold text-secondary-container bg-secondary/10 px-3 py-1 rounded-full uppercase">Live Sync Active</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Threshold Card 1 -->
+<div class="bg-surface-container p-8 rounded-xl space-y-4">
+<div class="w-12 h-12 bg-secondary-container/20 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<h4 class="font-headline font-bold">Raw Ingredients</h4>
+<p class="text-sm text-on-surface-variant">Alert when stock drops below minimum extraction needs.</p>
+<div class="pt-4 flex items-center gap-4">
+<input class="w-full accent-secondary" type="range"/>
+<span class="font-bold text-primary">15%</span>
+</div>
+</div>
+<!-- Threshold Card 2 -->
+<div class="bg-surface-container p-8 rounded-xl space-y-4">
+<div class="w-12 h-12 bg-tertiary-fixed/40 rounded-full flex items-center justify-center text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined">thermostat</span>
+</div>
+<h4 class="font-headline font-bold">Vessel Pressure</h4>
+<p class="text-sm text-on-surface-variant">Maximum tolerance before emergency steam release.</p>
+<div class="pt-4 flex items-center gap-4">
+<input class="w-full accent-on-tertiary-fixed-variant" type="range" value="85"/>
+<span class="font-bold text-primary">85%</span>
+</div>
+</div>
+<!-- Threshold Card 3 -->
+<div class="bg-surface-container p-8 rounded-xl space-y-4 border-2 border-secondary-container">
+<div class="w-12 h-12 bg-error-container/40 rounded-full flex items-center justify-center text-error">
+<span class="material-symbols-outlined">hourglass_empty</span>
+</div>
+<h4 class="font-headline font-bold">Expiration Buffer</h4>
+<p class="text-sm text-on-surface-variant">Lead time for moving stock before chemical decay.</p>
+<div class="pt-4 flex items-center gap-4">
+<input class="w-full accent-error" type="range" value="30"/>
+<span class="font-bold text-primary">30d</span>
+</div>
+</div>
+</div>
+</section>
+<!-- User Management Section (Admin View) -->
+<section class="space-y-8 pt-6">
+<div class="flex justify-between items-center">
+<div>
+<h3 class="text-2xl font-headline font-bold text-primary">Staff Hierarchy</h3>
+<p class="text-on-surface-variant font-body">Manage permissions and laboratory access roles.</p>
+</div>
+<button class="bg-surface text-primary border border-primary/20 px-6 py-3 rounded-md font-bold text-sm tracking-wide hover:bg-primary hover:text-on-primary transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                        INVITE STAFF
+                    </button>
+</div>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-high/30">
+<th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Staff Member</th>
+<th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Department</th>
+<th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Access Level</th>
+<th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Last Active</th>
+<th class="px-8 py-4 text-right"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container/20 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center font-bold">SK</div>
+<div>
+<p class="font-bold text-primary">Siti Khadijah</p>
+<p class="text-xs text-on-surface-variant">siti.k@apothecary.com</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">Quality Assurance</td>
+<td class="px-8 py-6">
+<span class="bg-primary-container/10 text-primary px-3 py-1 rounded text-xs font-bold uppercase tracking-tighter">Supervisor</span>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">2 mins ago</td>
+<td class="px-8 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container/20 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center font-bold">BR</div>
+<div>
+<p class="font-bold text-primary">Budi Raharjo</p>
+<p class="text-xs text-on-surface-variant">budi.r@apothecary.com</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">Extraction Plant</td>
+<td class="px-8 py-6">
+<span class="bg-surface-container-highest text-on-surface-variant px-3 py-1 rounded text-xs font-bold uppercase tracking-tighter">Technician</span>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">1 hour ago</td>
+<td class="px-8 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container/20 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed-variant flex items-center justify-center font-bold">DI</div>
+<div>
+<p class="font-bold text-primary">Dewi Indah</p>
+<p class="text-xs text-on-surface-variant">dewi.i@apothecary.com</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">Packaging</td>
+<td class="px-8 py-6">
+<span class="bg-surface-container-highest text-on-surface-variant px-3 py-1 rounded text-xs font-bold uppercase tracking-tighter">Staff</span>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant">Yesterday</td>
+<td class="px-8 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="bg-surface-container-high/20 px-8 py-4 flex justify-between items-center">
+<p class="text-xs text-on-surface-variant font-medium">Displaying 3 of 12 active staff members</p>
+<div class="flex gap-2">
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

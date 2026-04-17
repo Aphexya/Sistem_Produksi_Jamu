@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Supplier Registry | Artisanal Alchemist</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#dedacb",
+                      "on-tertiary-container": "#31c98f",
+                      "inverse-surface": "#323126",
+                      "on-primary-fixed-variant": "#0b513d",
+                      "on-primary-fixed": "#002117",
+                      "surface-container-high": "#ece8d9",
+                      "primary-fixed-dim": "#95d3ba",
+                      "background": "#fdf9e9",
+                      "primary-fixed": "#b0f0d6",
+                      "outline": "#707974",
+                      "inverse-on-surface": "#f5f1e1",
+                      "outline-variant": "#bfc9c3",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "on-secondary-container": "#684000",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#95d3ba",
+                      "tertiary-fixed": "#6ffbbe",
+                      "tertiary": "#003623",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "secondary-container": "#fea619",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f8f4e4",
+                      "surface-tint": "#2b6954",
+                      "surface-bright": "#fdf9e9",
+                      "primary": "#003527",
+                      "on-tertiary-fixed": "#002113",
+                      "surface": "#fdf9e9",
+                      "surface-variant": "#e6e3d3",
+                      "tertiary-container": "#004f34",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#2a1700",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#f2eede",
+                      "secondary": "#855300",
+                      "on-primary-container": "#80bea6",
+                      "on-secondary": "#ffffff",
+                      "on-surface-variant": "#404944",
+                      "surface-container-highest": "#e6e3d3",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#ffddb8",
+                      "on-surface": "#1c1c13",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#064e3b",
+                      "on-background": "#1c1c13",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "body": ["Plus Jakarta Sans"],
+                      "label": ["Plus Jakarta Sans"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fdf9e9; color: #1c1c13; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .nav-active { border-right-width: 4px; }
+        .tonal-glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-surface selection:bg-secondary-container/30">
+<!-- SideNavBar Integration -->
+<aside class="fixed left-0 top-0 h-full w-72 bg-[#fdf9e9] dark:bg-slate-950 flex flex-col py-8 px-6 shadow-[32px_0_64px_-20px_rgba(28,28,19,0.04)] z-50">
+<div class="mb-10">
+<h1 class="text-2xl font-black text-[#064e3b] dark:text-emerald-400 tracking-tighter font-headline">Artisanal Alchemist</h1>
+<p class="text-xs font-headline font-semibold tracking-tight text-[#1c1c13]/60">Production Suite v1.0</p>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Laboratory -->
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-[#1c1c13]/60 hover:bg-[#f8f4e4] transition-all duration-300 transform active:scale-95 font-headline font-semibold" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Laboratory</span>
+</a>
+<!-- Apothecary Stock -->
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-[#1c1c13]/60 hover:bg-[#f8f4e4] transition-all duration-300 transform active:scale-95 font-headline font-semibold" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Apothecary Stock</span>
+</a>
+<!-- Batch Brewing -->
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-[#1c1c13]/60 hover:bg-[#f8f4e4] transition-all duration-300 transform active:scale-95 font-headline font-semibold" href="#">
+<span class="material-symbols-outlined">science</span>
+<span>Batch Brewing</span>
+</a>
+<!-- Herbal Sources (ACTIVE) -->
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-[#855300] font-bold border-r-4 border-[#855300] bg-[#f8f4e4] transition-all duration-300 transform active:scale-95 font-headline" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span>Herbal Sources</span>
+</a>
+<!-- Alchemist Logs -->
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-[#1c1c13]/60 hover:bg-[#f8f4e4] transition-all duration-300 transform active:scale-95 font-headline font-semibold" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span>Alchemist Logs</span>
+</a>
+</nav>
+<div class="mt-auto pt-8">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-4 rounded-lg font-headline font-bold text-sm tracking-wide shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
+                Start New Batch
+            </button>
+<div class="mt-8 flex items-center gap-3 px-2">
+<img alt="Head Alchemist Profile" class="w-10 h-10 rounded-full object-cover grayscale" data-alt="portrait of a focused senior botanist with grey hair wearing professional laboratory attire in a brightly lit apothecary studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr7MWqM1DmEHLIUrK2sx642LYCfRw7sRceiZCDvOILqE-7UV_wd7bXwtFGyVAJFORrqGkKNUCXaTEEOffieBMIBZzvmyYSLexu-uBafkvwdAe77hOxdjtQDGmjMLzN-LNKoBdd9Woss9es82s-J9L_IKRQGhoViUu6LODxPELMjs1eRcln41kCSqHBmyzsQYzvUAirHBreOI5hibNoJ0r1OBhitq4gLEY8v2WRZKn2YRKpHKc7oSj8LW5a9-x8fvGpCVIutCbZSNKJ"/>
+<div>
+<p class="text-xs font-bold text-on-surface">Head Alchemist</p>
+<p class="text-[10px] text-on-surface/40 uppercase tracking-widest font-bold">Profile Settings</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopAppBar Integration -->
+<header class="fixed top-0 right-0 w-[calc(100%-18rem)] z-40 bg-[#fdf9e9]/70 backdrop-blur-md flex justify-between items-center px-12 h-24 border-b border-[#1c1c13]/5">
+<div class="flex items-center gap-8 flex-1">
+<h2 class="font-headline text-lg font-bold text-[#064e3b]">Supplier Registry</h2>
+<div class="relative w-96 group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface/30">search</span>
+<input class="w-full bg-surface-container-high/40 border-none rounded-xl pl-12 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-[#064e3b]/20 transition-all font-body" placeholder="Search registry..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="p-2 text-on-surface/40 hover:bg-[#f8f4e4] rounded-lg transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface/40 hover:bg-[#f8f4e4] rounded-lg transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-72 pt-32 px-12 pb-24 min-h-screen">
+<!-- Header Section -->
+<section class="flex justify-between items-end mb-12">
+<div>
+<h3 class="font-headline text-5xl font-extrabold tracking-tighter text-primary mb-2">Supplier Network</h3>
+<p class="text-on-surface-variant font-body">Managing 124 curated artisanal suppliers across the Madura archipelago.</p>
+</div>
+<button class="flex items-center gap-2 bg-secondary text-white px-6 py-3.5 rounded-xl font-headline font-bold text-sm shadow-xl hover:shadow-secondary/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-xl">add</span>
+                Add New Supplier
+            </button>
+</section>
+<div class="grid grid-cols-12 gap-8">
+<!-- Bento Grid - Performance Metrics -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Metric 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[32px_0_64px_-20px_rgba(28,28,19,0.04)]">
+<p class="text-xs font-bold text-on-surface/40 uppercase tracking-widest mb-4">Total Deliveries</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-6xl font-light text-primary">1,420</span>
+<span class="text-tertiary-fixed-dim font-bold text-sm">+12%</span>
+</div>
+<div class="mt-8 h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4 rounded-full"></div>
+</div>
+</div>
+<!-- Recent Shipments -->
+<div class="bg-surface-container-low p-8 rounded-xl">
+<h4 class="font-headline text-lg font-bold mb-6">Recent Deliveries</h4>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined">eco</span>
+</div>
+<div>
+<p class="font-bold text-sm text-on-surface">Wild Turmeric</p>
+<p class="text-xs text-on-surface/40">From Sumenep Botanical • 2h ago</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined">inventory</span>
+</div>
+<div>
+<p class="font-bold text-sm text-on-surface">Glass Vials 50ml</p>
+<p class="text-xs text-on-surface/40">Glassware Crafts Co. • 5h ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Directory Section -->
+<div class="col-span-12 lg:col-span-8">
+<div class="bg-surface-container-lowest rounded-xl shadow-[32px_0_64px_-20px_rgba(28,28,19,0.04)] overflow-hidden">
+<div class="p-8 border-b border-surface-container">
+<div class="flex items-center justify-between">
+<div class="flex gap-4">
+<button class="px-4 py-2 bg-surface-container-high text-primary font-bold text-xs rounded-lg">All Suppliers</button>
+<button class="px-4 py-2 text-on-surface/40 font-bold text-xs rounded-lg hover:bg-surface-container-low transition-colors">Raw Herbs</button>
+<button class="px-4 py-2 text-on-surface/40 font-bold text-xs rounded-lg hover:bg-surface-container-low transition-colors">Packaging</button>
+</div>
+<button class="flex items-center gap-2 text-xs font-bold text-primary">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                                Filter
+                            </button>
+</div>
+</div>
+<!-- Supplier List (The Editorial Layout) -->
+<div class="divide-y divide-surface-container/50">
+<!-- Supplier Row 1 -->
+<div class="p-8 hover:bg-surface-container-low/30 transition-colors group">
+<div class="flex items-start justify-between">
+<div class="flex gap-6">
+<div class="w-16 h-16 rounded-xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 ring-4 ring-surface-container group-hover:ring-primary/10">
+<img alt="Sumenep Botanical Supply" class="w-full h-full object-cover" data-alt="close-up of fresh vibrant yellow turmeric roots and green leaves on a textured rustic wooden surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANNVo9aQMfhpTObOb-_lnvKEqP3k66vuYt190p6LIOf8rJ7Nv9x8s1kCLwd6S2sPw1dVUEyXXE89BvC3KDB5biKw0bVsZULo4MR3Pvil1UrsaEuSUI59-PxID-GzTTao_CpBO4nsQiHRuad5GH-Pcp80Z8r8gndFl1rGrPYmt_l_MtvRuYDNIRQTUafl2w2lH-RTnFTknNiRsQp1WMG8wYTbm-JUgdNYFE53coUyhr5tpfH5RvOCkJiMvYnQ6Z9pvBE18wJV45gLmd"/>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h5 class="font-headline text-xl font-bold text-on-surface">Sumenep Botanical Supply</h5>
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold rounded uppercase tracking-wider">Active</span>
+</div>
+<p class="text-sm text-on-surface/40 font-body mb-4">Rhizomes, Roots &amp; Rare Spices</p>
+<div class="flex items-center gap-6 text-xs text-on-surface/60">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person</span>
+<span>Ariya Wijaya</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">mail</span>
+<span>ariya@botanical.md</span>
+</div>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs text-on-surface/40 uppercase tracking-widest font-bold mb-1">Last Delivery</p>
+<p class="font-headline font-bold text-on-surface">Oct 12, 2023</p>
+<button class="mt-4 text-primary font-bold text-xs flex items-center gap-1 float-right group-hover:translate-x-1 transition-transform">
+                                        View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Supplier Row 2 -->
+<div class="p-8 hover:bg-surface-container-low/30 transition-colors group">
+<div class="flex items-start justify-between">
+<div class="flex gap-6">
+<div class="w-16 h-16 rounded-xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 ring-4 ring-surface-container group-hover:ring-primary/10">
+<img alt="Jamu Glassware Crafts" class="w-full h-full object-cover" data-alt="neatly arranged rows of clean empty clear glass apothecary bottles with cork stoppers in a bright airy studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE97P0MxHLDkW8UmMR4q_pBjH8bIKS2iX4Wyw2ezBRl36-it0F2S1iznOJydjzQ6Opi0UDcXPpy2aUkaQ1shUxK8Gv5Dr5wWzbFMxtm32T6-9JDmadSzZk6cjPBeBeabGnoRAD6nnEB22Rk5z_CDWj1KDqpk2sSHku8iIyh5ZK0cJi8q6qpWsEsxq8QtmY5V59GSbzdu8gTe634BkkhBE55HP3VKR51I2LWyrrhM8--s9zhdi1uzcwGX-p-18fNX5lq50ndqm_1mNc"/>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h5 class="font-headline text-xl font-bold text-on-surface">Glassware Crafts Co.</h5>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded uppercase tracking-wider">Contract Pending</span>
+</div>
+<p class="text-sm text-on-surface/40 font-body mb-4">Sustainable Glass &amp; Bamboo Packaging</p>
+<div class="flex items-center gap-6 text-xs text-on-surface/60">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person</span>
+<span>Siti Aminah</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">call</span>
+<span>+62 812-992-001</span>
+</div>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs text-on-surface/40 uppercase tracking-widest font-bold mb-1">Last Delivery</p>
+<p class="font-headline font-bold text-on-surface">Sep 28, 2023</p>
+<button class="mt-4 text-primary font-bold text-xs flex items-center gap-1 float-right group-hover:translate-x-1 transition-transform">
+                                        View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Supplier Row 3 -->
+<div class="p-8 hover:bg-surface-container-low/30 transition-colors group">
+<div class="flex items-start justify-between">
+<div class="flex gap-6">
+<div class="w-16 h-16 rounded-xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 ring-4 ring-surface-container group-hover:ring-primary/10">
+<img alt="Mount Agung Herbs" class="w-full h-full object-cover" data-alt="misty mountain slopes with terraced gardens of lush medicinal herbs at dawn with soft ethereal morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC46De51g12QFxneEkfY7ZHSIfg3jeKpSf9ATkuCQEO6m26zQwZFAr8yglAc_kXV1oHlPpIQEN6XzAHakHxN1_WNdMO7Sn7eeF1maljiksnkAwfjI6Uwd6i57bTGJZkC95aZJHjp9NMazppnH0j6jOWL6UboIGZSyJ-6PhM3PKdi28nl4DsRBbc3ZdlZuM0ayVQAr3hlgZXZFi3sTVqbvKqSLbplJU7WUJVzPIi3ywQ5Wwj2AbrJB40Y4EKbfGI00XhTleJ02zP5_ZA"/>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h5 class="font-headline text-xl font-bold text-on-surface">Mount Agung Herbs</h5>
+<span class="px-2 py-0.5 bg-error-container text-on-error-container text-[10px] font-bold rounded uppercase tracking-wider">On Hold</span>
+</div>
+<p class="text-sm text-on-surface/40 font-body mb-4">Premium High-Altitude Botanicals</p>
+<div class="flex items-center gap-6 text-xs text-on-surface/60">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person</span>
+<span>Dewa Ketut</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">mail</span>
+<span>ketut@agung.id</span>
+</div>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs text-on-surface/40 uppercase tracking-widest font-bold mb-1">Last Delivery</p>
+<p class="font-headline font-bold text-on-surface">Aug 14, 2023</p>
+<button class="mt-4 text-primary font-bold text-xs flex items-center gap-1 float-right group-hover:translate-x-1 transition-transform">
+                                        View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Pagination -->
+<div class="p-8 bg-surface-container-low/20 flex items-center justify-between border-t border-surface-container">
+<span class="text-xs font-bold text-on-surface/40 tracking-wide uppercase">Showing 1-12 of 124 Suppliers</span>
+<div class="flex gap-2">
+<button class="p-2 bg-white rounded border border-surface-container text-on-surface hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="p-2 bg-primary rounded text-white shadow-md">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
