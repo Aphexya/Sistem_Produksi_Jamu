@@ -1,20 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
+import { mainNavItems, adminNavItems } from '../../config/navigation';
 
-const navItems = [
-  { icon: 'dashboard', label: 'Dashboard', to: '/dashboard' },
-  { icon: 'inventory_2', label: 'Inventaris', to: '/inventory' },
-  { icon: 'precision_manufacturing', label: 'Produksi', to: '/production' },
-  { icon: 'menu_book', label: 'Resep', to: '/recipes' },
-  { icon: 'local_shipping', label: 'Supplier', to: '/supplier' },
-  { icon: 'analytics', label: 'Laporan', to: '/reports' },
-  { icon: 'settings', label: 'Pengaturan', to: '/settings' },
-];
-
-export default function Sidebar() {
+export default function Sidebar({ className = '' }: { className?: string }) {
   const { pathname } = useLocation();
 
   return (
-    <aside className="h-full w-72 flex flex-col fixed left-0 top-0 bg-surface-container-low z-50">
+    <aside className={`h-full w-72 flex flex-col fixed left-0 top-0 bg-surface-container-low z-50 ${className}`}>
       <div className="flex flex-col h-screen py-8">
         {/* Branding */}
         <div className="px-8 mb-10">
@@ -27,23 +18,47 @@ export default function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`px-6 py-4 flex items-center gap-3 transition-colors ${isActive
-                  ? 'text-primary-container font-bold border-l-4 border-secondary-container bg-surface/50'
-                  : 'text-on-surface/60 hover:bg-surface hover:text-on-surface border-l-4 border-transparent'
-                  }`}
-              >
-                <span className="material-symbols-outlined">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+        <nav className="flex-1 overflow-y-auto space-y-6">
+          <div className="space-y-1">
+            {mainNavItems.map((item) => {
+              const isActive = pathname === item.to;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`px-6 py-4 flex items-center gap-3 transition-colors ${isActive
+                    ? 'text-primary-container font-bold border-l-4 border-secondary-container bg-surface/50'
+                    : 'text-on-surface/60 hover:bg-surface hover:text-on-surface border-l-4 border-transparent'
+                    }`}
+                >
+                  <span className="material-symbols-outlined">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="space-y-1">
+            <p className="px-8 mb-2 text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant/40">
+              Administrasi
+            </p>
+            {adminNavItems.map((item) => {
+              const isActive = pathname === item.to;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`px-6 py-4 flex items-center gap-3 transition-colors ${isActive
+                    ? 'text-primary-container font-bold border-l-4 border-secondary-container bg-surface/50'
+                    : 'text-on-surface/60 hover:bg-surface hover:text-on-surface border-l-4 border-transparent'
+                    }`}
+                >
+                  <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
         </nav>
 
         {/* New Batch CTA */}

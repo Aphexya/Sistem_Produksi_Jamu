@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -11,6 +12,13 @@ const Dashboard = lazy(() => import('../pages/Dashboard'));
 const Inventory = lazy(() => import('../pages/Inventory'));
 const Production = lazy(() => import('../pages/Production'));
 const Recipes = lazy(() => import('../pages/Recipes'));
+const Supplier = lazy(() => import('../pages/Supplier'));
+const Reports = lazy(() => import('../pages/Reports'));
+const Settings = lazy(() => import('../pages/Settings'));
+const SearchResults = lazy(() => import('../pages/SearchResults'));
+const Notifications = lazy(() => import('../pages/Notifications'));
+const Users = lazy(() => import('../pages/Users'));
+const RecipeDetail = lazy(() => import('../pages/RecipeDetail'));
 
 // 2. Beri fallback (Loading Screen) saat file komponen sedang di-download oleh browser
 const LazyLoad = ({ children }: { children: React.ReactNode }) => (
@@ -61,6 +69,62 @@ const router = createBrowserRouter([
     element: (
       <LazyLoad>
         <Recipes />
+      </LazyLoad>
+    ),
+  },
+  {
+    path: '/recipes/:id',
+    element: (
+      <LazyLoad>
+        <RecipeDetail />
+      </LazyLoad>
+    ),
+  },
+  {
+    path: '/supplier',
+    element: (
+      <LazyLoad>
+        <Supplier />
+      </LazyLoad>
+    ),
+  },
+  {
+    path: '/reports',
+    element: (
+      <LazyLoad>
+        <Reports />
+      </LazyLoad>
+    ),
+  },
+  {
+    path: '/settings',
+    element: (
+      <LazyLoad>
+        <Settings />
+      </LazyLoad>
+    ),
+  },
+  {
+    path: '/search',
+    element: (
+      <LazyLoad>
+        <SearchResults />
+      </LazyLoad>
+    ),
+  },
+  {
+    path: '/notifications',
+    element: (
+      <LazyLoad>
+        <Notifications />
+      </LazyLoad>
+    ),
+  },
+  {
+    path: '/users',
+    element: (
+      <LazyLoad>
+        <Users />
       </LazyLoad>
     ),
   },
