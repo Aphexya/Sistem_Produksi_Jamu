@@ -2,9 +2,10 @@
 // Gunakan ini untuk testing tanpa backend yang real
 
 const MOCK_ENABLED = true; // Set ke false untuk production
+const STORAGE_KEY = 'mock_bahan_list';
 
-// In-memory storage untuk mock data
-let mockBahanList: any[] = [
+// Default initial data
+const DEFAULT_BAHAN = [
   {
     id: 1,
     nama: 'Jahe Emprit',
@@ -34,7 +35,39 @@ let mockBahanList: any[] = [
   },
 ];
 
-let nextId = 4;
+// Load mock data from localStorage, atau gunakan default
+let mockBahanList: any[] = (() => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      console.log('[MOCK API] Loading data from localStorage');
+      return JSON.parse(stored);
+    }
+  } catch (error) {
+    console.warn('[MOCK API] Failed to load from localStorage:', error);
+  }
+  return DEFAULT_BAHAN;
+})();
+
+let nextId = Math.max(...mockBahanList.map(item => item.id || 0)) + 1;
+
+// Helper function untuk save ke localStorage
+function saveMockDataToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(mockBahanList));
+    console.log('[MOCK API] Data saved to localStorage');
+  } catch (error) {
+    console.warn('[MOCK API] Failed to save to localStorage:', error);
+  }
+}
+
+// Helper function untuk reset mock data
+export function resetMockData() {
+  mockBahanList = JSON.parse(JSON.stringify(DEFAULT_BAHAN));
+  nextId = 4;
+  saveMockDataToStorage();
+  console.log('[MOCK API] Mock data reset to default');
+}
 
 export function setupMockApi() {
   if (!MOCK_ENABLED) return;
@@ -42,7 +75,7 @@ export function setupMockApi() {
   // Override fetch untuk mock API
   const originalFetch = window.fetch;
 
-  window.fetch = async (url: string | Request, options?: RequestInit) => {
+  (window.fetch as any) = async (url: string | Request, options?: RequestInit) => {
     const urlString = typeof url === 'string' ? url : url.url;
 
     // Mock GET /api/bahan
@@ -88,6 +121,9 @@ export function setupMockApi() {
         mockBahanList.push(newBahan);
 
         console.log('[MOCK API] Updated list:', mockBahanList);
+        
+        // Save to localStorage untuk persistence across refreshes
+        saveMockDataToStorage();
 
         const mockResponse = {
           success: true,
@@ -121,4 +157,6 @@ export function setupMockApi() {
   };
 
   console.log('[MOCK API] Mock API initialized. MOCK_ENABLED:', MOCK_ENABLED);
+  console.log('[MOCK API] Data persistence: localStorage enabled');
+  console.log('[MOCK API] Current items:', mockBahanList.length);
 }
