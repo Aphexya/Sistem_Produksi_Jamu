@@ -1,197 +1,179 @@
+-- ============================================================
 -- phpMyAdmin SQL Dump
--- version 5.2.2
--- https://www.phpmyadmin.net/
+-- Sistem Produksi Jamu - Penjamu Handal
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 21 Apr 2026 pada 14.25
--- Versi server: 8.4.3
--- Versi PHP: 8.3.26
+-- Database: jamu
+--
+-- CARA IMPORT DI phpMyAdmin:
+--   1. Buka phpMyAdmin
+--   2. Klik tab "Import"
+--   3. Pilih file ini (jamu.sql)
+--   4. Klik "Go"
+--
+-- ATAU via terminal:
+--   mysql -u root -p < jamu.sql
+-- ============================================================
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+SET NAMES utf8mb4;
 
+-- ------------------------------------------------------------
+-- Buat database jamu (jika belum ada)
+-- ------------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS `jamu`
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+USE `jamu`;
 
---
--- Database: `jamu`
---
+-- ------------------------------------------------------------
+-- Tabel: kota
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `kota` (
+  `id_kota`   INT AUTO_INCREMENT PRIMARY KEY,
+  `nama_kota` VARCHAR(100) NOT NULL,
+  `ket_kota`  TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
+-- ------------------------------------------------------------
+-- Tabel: user (admin/staff)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `user` (
+  `id_user`    INT AUTO_INCREMENT PRIMARY KEY,
+  `id_kota`    INT,
+  `username`   VARCHAR(100) NOT NULL UNIQUE,
+  `email`      VARCHAR(150) NOT NULL UNIQUE,
+  `pw`         VARCHAR(255) NOT NULL,
+  `role`       ENUM('admin','supervisor','staff') NOT NULL DEFAULT 'staff',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`id_kota`) REFERENCES `kota`(`id_kota`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Struktur dari tabel `jamu`
---
+-- ------------------------------------------------------------
+-- Tabel: produsen (supplier/pemasok)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `produsen` (
+  `id_produsen`   INT AUTO_INCREMENT PRIMARY KEY,
+  `nama_produsen` VARCHAR(200) NOT NULL,
+  `alamat`        TEXT,
+  `kota`          VARCHAR(100),
+  `kontak`        VARCHAR(100),
+  `email`         VARCHAR(150),
+  `status`        ENUM('aktif','menunggu','ditangguhkan') DEFAULT 'aktif',
+  `created_at`    DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `jamu` (
-  `id_jamu` int NOT NULL,
-  `id_user` int DEFAULT NULL,
-  `nama_jamu` varchar(50) DEFAULT NULL,
-  `ket_jamu` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- ------------------------------------------------------------
+-- Tabel: jamu (resep/produk jamu)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `jamu` (
+  `id_jamu`     INT AUTO_INCREMENT PRIMARY KEY,
+  `id_user`     INT,
+  `nama_jamu`   VARCHAR(200) NOT NULL,
+  `ket_jamu`    TEXT,
+  `jenis`       VARCHAR(50),
+  `perizinan`   VARCHAR(50),
+  `id_produsen` INT,
+  `created_at`  DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`id_user`)     REFERENCES `user`(`id_user`)         ON DELETE SET NULL,
+  FOREIGN KEY (`id_produsen`) REFERENCES `produsen`(`id_produsen`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
+-- ------------------------------------------------------------
+-- Tabel: rempah (master bahan baku)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `rempah` (
+  `id_rempah`   INT AUTO_INCREMENT PRIMARY KEY,
+  `nama_rempah` VARCHAR(200) NOT NULL,
+  `ket_rempah`  TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Struktur dari tabel `khasiat`
---
+-- ------------------------------------------------------------
+-- Tabel: bahan (inventaris stok bahan baku)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bahan` (
+  `id`          INT AUTO_INCREMENT PRIMARY KEY,
+  `nama`        VARCHAR(200) NOT NULL,
+  `kategori`    VARCHAR(100),
+  `satuan`      VARCHAR(20),
+  `stokAwal`    DECIMAL(10,2) DEFAULT 0,
+  `hargaSatuan` DECIMAL(15,2) DEFAULT 0,
+  `threshold`   DECIMAL(10,2) DEFAULT 10,
+  `created_at`  DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `khasiat` (
-  `id_khasiat` int NOT NULL,
-  `khasiat` varchar(100) DEFAULT NULL,
-  `ket_khasiat` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- ------------------------------------------------------------
+-- Tabel: khasiat
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `khasiat` (
+  `id_khasiat`  INT AUTO_INCREMENT PRIMARY KEY,
+  `khasiat`     VARCHAR(200) NOT NULL,
+  `ket_khasiat` TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
+-- ------------------------------------------------------------
+-- Tabel: komposisi (relasi jamu <-> rempah)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `komposisi` (
+  `id_komposisi`  INT AUTO_INCREMENT PRIMARY KEY,
+  `id_rempah`     INT NOT NULL,
+  `id_jamu`       INT NOT NULL,
+  `banyak_rempah` VARCHAR(100),
+  FOREIGN KEY (`id_rempah`) REFERENCES `rempah`(`id_rempah`) ON DELETE CASCADE,
+  FOREIGN KEY (`id_jamu`)   REFERENCES `jamu`(`id_jamu`)     ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Struktur dari tabel `khasiat_jamu`
---
+-- ------------------------------------------------------------
+-- Tabel: khasiat_jamu (relasi jamu <-> khasiat)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `khasiat_jamu` (
+  `id_khasiat_jamu` INT AUTO_INCREMENT PRIMARY KEY,
+  `id_khasiat`      INT NOT NULL,
+  `id_jamu`         INT NOT NULL,
+  FOREIGN KEY (`id_khasiat`) REFERENCES `khasiat`(`id_khasiat`) ON DELETE CASCADE,
+  FOREIGN KEY (`id_jamu`)    REFERENCES `jamu`(`id_jamu`)       ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `khasiat_jamu` (
-  `id_khasiatjamu` int NOT NULL,
-  `id_khasiat` int DEFAULT NULL,
-  `id_jamu` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- ------------------------------------------------------------
+-- Tabel: produksi (batch produksi)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `produksi` (
+  `id_produksi`   INT AUTO_INCREMENT PRIMARY KEY,
+  `id_jamu`       INT NOT NULL,
+  `id_user`       INT,
+  `kode_batch`    VARCHAR(50) UNIQUE,
+  `ukuran_batch`  DECIMAL(10,2),
+  `volume_output` DECIMAL(10,2),
+  `efisiensi`     DECIMAL(5,2),
+  `status`        ENUM('antrian','ekstraksi','botolisasi','selesai') DEFAULT 'antrian',
+  `catatan`       TEXT,
+  `created_at`    DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (`id_jamu`) REFERENCES `jamu`(`id_jamu`) ON DELETE RESTRICT,
+  FOREIGN KEY (`id_user`) REFERENCES `user`(`id_user`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
+-- ------------------------------------------------------------
+-- Data awal: Kota Madura
+-- ------------------------------------------------------------
+INSERT IGNORE INTO `kota` (`id_kota`, `nama_kota`, `ket_kota`) VALUES
+  (1, 'Sampang',   'Kabupaten Sampang, Madura'),
+  (2, 'Sumenep',   'Kabupaten Sumenep, Madura'),
+  (3, 'Pamekasan', 'Kabupaten Pamekasan, Madura'),
+  (4, 'Bangkalan', 'Kabupaten Bangkalan, Madura');
 
---
--- Struktur dari tabel `komposisi`
---
+-- ------------------------------------------------------------
+-- Data awal: Admin default
+-- username : admin
+-- password : admin123
+-- ------------------------------------------------------------
+INSERT IGNORE INTO `user` (`id_user`, `id_kota`, `username`, `email`, `pw`, `role`) VALUES
+  (1, 1, 'admin', 'admin@penjamuhandal.id',
+   '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lHHG',
+   'admin');
 
-CREATE TABLE `komposisi` (
-  `id_komposisi` int NOT NULL,
-  `id_rempah` int DEFAULT NULL,
-  `id_jamu` int DEFAULT NULL,
-  `banyak_rempah` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `kota`
---
-
-CREATE TABLE `kota` (
-  `id_kota` int NOT NULL,
-  `nama_kota` varchar(50) DEFAULT NULL,
-  `ket_kota` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `rempah`
---
-
-CREATE TABLE `rempah` (
-  `id_rempah` int NOT NULL,
-  `nama_rempah` varchar(50) DEFAULT NULL,
-  `ket_rempah` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `user`
---
-
-CREATE TABLE `user` (
-  `id_user` int NOT NULL,
-  `id_kota` int DEFAULT NULL,
-  `username` varchar(50) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `pw` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indeks untuk tabel `jamu`
---
-ALTER TABLE `jamu`
-  ADD PRIMARY KEY (`id_jamu`),
-  ADD KEY `id_user` (`id_user`);
-
---
--- Indeks untuk tabel `khasiat`
---
-ALTER TABLE `khasiat`
-  ADD PRIMARY KEY (`id_khasiat`);
-
---
--- Indeks untuk tabel `khasiat_jamu`
---
-ALTER TABLE `khasiat_jamu`
-  ADD PRIMARY KEY (`id_khasiatjamu`),
-  ADD KEY `id_khasiat` (`id_khasiat`),
-  ADD KEY `id_jamu` (`id_jamu`);
-
---
--- Indeks untuk tabel `komposisi`
---
-ALTER TABLE `komposisi`
-  ADD PRIMARY KEY (`id_komposisi`),
-  ADD KEY `id_rempah` (`id_rempah`),
-  ADD KEY `id_jamu` (`id_jamu`);
-
---
--- Indeks untuk tabel `kota`
---
-ALTER TABLE `kota`
-  ADD PRIMARY KEY (`id_kota`);
-
---
--- Indeks untuk tabel `rempah`
---
-ALTER TABLE `rempah`
-  ADD PRIMARY KEY (`id_rempah`);
-
---
--- Indeks untuk tabel `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id_user`),
-  ADD KEY `id_kota` (`id_kota`);
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `jamu`
---
-ALTER TABLE `jamu`
-  ADD CONSTRAINT `jamu_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
-
---
--- Ketidakleluasaan untuk tabel `khasiat_jamu`
---
-ALTER TABLE `khasiat_jamu`
-  ADD CONSTRAINT `khasiat_jamu_ibfk_1` FOREIGN KEY (`id_khasiat`) REFERENCES `khasiat` (`id_khasiat`),
-  ADD CONSTRAINT `khasiat_jamu_ibfk_2` FOREIGN KEY (`id_jamu`) REFERENCES `jamu` (`id_jamu`);
-
---
--- Ketidakleluasaan untuk tabel `komposisi`
---
-ALTER TABLE `komposisi`
-  ADD CONSTRAINT `komposisi_ibfk_1` FOREIGN KEY (`id_rempah`) REFERENCES `rempah` (`id_rempah`),
-  ADD CONSTRAINT `komposisi_ibfk_2` FOREIGN KEY (`id_jamu`) REFERENCES `jamu` (`id_jamu`);
-
---
--- Ketidakleluasaan untuk tabel `user`
---
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`id_kota`) REFERENCES `kota` (`id_kota`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

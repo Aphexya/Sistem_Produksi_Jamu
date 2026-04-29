@@ -53,20 +53,15 @@ npm install
 
 ### 2. Setup Database
 
-Buat database MySQL dan jalankan schema:
+**Cara 1 — phpMyAdmin (direkomendasikan):**
+1. Buka phpMyAdmin
+2. Klik tab **Import**
+3. Pilih file **`jamu.sql`** (ada di root project)
+4. Klik **Go**
 
+**Cara 2 — Terminal:**
 ```bash
-mysql -u root -p < scripts/schema.sql
-```
-
-Atau manual:
-```sql
-CREATE DATABASE jamu CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-Lalu import schema:
-```bash
-mysql -u root -p jamu < scripts/schema.sql
+mysql -u root -p < jamu.sql
 ```
 
 ### 3. Konfigurasi Environment
@@ -306,7 +301,7 @@ npm install
 Cek kredensial MySQL di `.env`
 
 ### Error: Table doesn't exist
-Jalankan `schema.sql` terlebih dahulu
+Import `jamu.sql` di phpMyAdmin terlebih dahulu
 
 ### Port 3000 sudah digunakan
 Ubah `PORT` di `.env` atau kill process:
