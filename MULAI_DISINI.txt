@@ -1,0 +1,184 @@
+╔═══════════════════════════════════════════════════════════════════════╗
+║                                                                       ║
+║          🚀 SISTEM PRODUKSI JAMU - PANDUAN CEPAT                     ║
+║                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+
+📋 JAWABAN CEPAT PERTANYAAN ANDA:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ Login pakai email dan password apa?
+
+   ✅ Username: admin
+   ✅ Password: admin123
+   
+   ⚠️  PENTING: Di form login, label-nya "Alamat Email" tapi ISI DENGAN 
+       USERNAME "admin", bukan email!
+
+
+❓ Port 5173 atau 3000? Yang mana yang benar?
+
+   ✅ KEDUANYA BENAR! Harus jalan bersamaan:
+   
+      • Port 3000 = Backend (Express.js) - jalan di terminal 1
+      • Port 5173 = Frontend (React) - jalan di terminal 2
+      
+   📌 Yang dibuka di browser: http://localhost:5173
+
+
+❓ Kenapa tidak bisa dibuka di browser?
+
+   Cek 3 hal ini:
+   
+   ✅ MySQL di XAMPP/Laragon sudah RUNNING (hijau)?
+   ✅ Backend server sudah jalan di terminal 1?
+   ✅ Frontend server sudah jalan di terminal 2?
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 CARA MENJALANKAN PROJECT (STEP-BY-STEP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 1: Jalankan MySQL                                              │
+└─────────────────────────────────────────────────────────────────────┘
+
+   1. Buka XAMPP Control Panel atau Laragon
+   2. Klik tombol START pada MySQL
+   3. Pastikan statusnya RUNNING (hijau)
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 2: Import Database (SEKALI SAJA)                               │
+└─────────────────────────────────────────────────────────────────────┘
+
+   1. Buka browser → http://localhost/phpmyadmin
+   2. Klik tab "Import"
+   3. Pilih file "jamu.sql" (ada di folder project ini)
+   4. Klik "Go"
+   5. Tunggu sampai sukses ✅
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 3: Install Dependencies Backend (SEKALI SAJA)                  │
+└─────────────────────────────────────────────────────────────────────┘
+
+   Buka Command Prompt / Terminal, ketik:
+   
+   cd backend
+   npm install
+   
+   Tunggu sampai selesai (1-2 menit)
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 4: Install Dependencies Frontend (SEKALI SAJA)                 │
+└─────────────────────────────────────────────────────────────────────┘
+
+   Buka Command Prompt / Terminal BARU, ketik:
+   
+   cd frontend
+   npm install
+   
+   Tunggu sampai selesai (2-3 menit)
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 5: Jalankan Backend Server (SETIAP KALI MAU PAKAI)             │
+└─────────────────────────────────────────────────────────────────────┘
+
+   Di terminal pertama (yang tadi di folder backend), ketik:
+   
+   npm run dev
+   
+   Tunggu sampai muncul:
+   🚀 Server berjalan di http://localhost:3000
+   
+   ⚠️  JANGAN TUTUP TERMINAL INI! Biarkan tetap jalan.
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 6: Jalankan Frontend Server (SETIAP KALI MAU PAKAI)            │
+└─────────────────────────────────────────────────────────────────────┘
+
+   Buka terminal BARU (jangan tutup yang backend!), ketik:
+   
+   cd frontend
+   npm run dev
+   
+   Tunggu sampai muncul:
+   ➜  Local:   http://localhost:5173/
+   
+   ⚠️  JANGAN TUTUP TERMINAL INI! Biarkan tetap jalan.
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 7: Buka di Browser                                             │
+└─────────────────────────────────────────────────────────────────────┘
+
+   1. Buka browser (Chrome/Firefox/Edge)
+   2. Ketik: http://localhost:5173
+   3. Halaman login akan muncul
+   4. Login dengan:
+      • Username: admin
+      • Password: admin123
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 RINGKASAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   ┌──────────────┬─────────────────────────────────────────────────┐
+   │ Service      │ URL                                             │
+   ├──────────────┼─────────────────────────────────────────────────┤
+   │ Aplikasi Web │ http://localhost:5173  ← BUKA INI DI BROWSER   │
+   │ Backend API  │ http://localhost:3000  ← Jangan dibuka         │
+   │ phpMyAdmin   │ http://localhost/phpmyadmin                     │
+   └──────────────┴─────────────────────────────────────────────────┘
+
+   ┌──────────────┬─────────────────────────────────────────────────┐
+   │ Username     │ admin                                           │
+   │ Password     │ admin123                                        │
+   └──────────────┴─────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔧 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   ❌ "Cannot connect to database"
+      → Pastikan MySQL di XAMPP/Laragon sudah RUNNING
+   
+   ❌ "'vite' is not recognized"
+      → Jalankan: cd frontend && npm install
+   
+   ❌ "Port already in use"
+      → Restart komputer atau tutup aplikasi yang pakai port 3000/5173
+   
+   ❌ "Invalid credentials"
+      → Username: admin (bukan email!)
+      → Password: admin123
+   
+   ❌ Halaman tidak muncul
+      → Pastikan kedua server (backend + frontend) sudah jalan
+      → Buka http://localhost:5173 (bukan 3000!)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 FILE PANDUAN LENGKAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   📄 CARA_MENJALANKAN_PROJECT.md  → Panduan lengkap step-by-step
+   📄 RINGKASAN_PROJECT.md         → Ringkasan project & endpoint API
+   📄 backend/README.md            → Dokumentasi backend API
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   ✅ Project sudah siap dijalankan!
+   ✅ Sudah dipush ke GitHub!
+   
+   Selamat mencoba! 🎉
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
