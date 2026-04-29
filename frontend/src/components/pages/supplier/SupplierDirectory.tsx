@@ -1,97 +1,148 @@
-const suppliers = [
-  {
-    id: 1,
-    name: 'Sumenep Botanical Supply',
-    status: 'Aktif',
-    statusClass: 'bg-tertiary-fixed text-on-tertiary-fixed-variant',
-    description: 'Rimpang, Akar & Rempah Langka',
-    contactName: 'Ariya Wijaya',
-    contactEmail: 'ariya@botanical.md',
-    contactIcon: 'mail',
-    lastDelivery: '12 Okt 2023',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuANNVo9aQMfhpTObOb-_lnvKEqP3k66vuYt190p6LIOf8rJ7Nv9x8s1kCLwd6S2sPw1dVUEyXXE89BvC3KDB5biKw0bVsZULo4MR3Pvil1UrsaEuSUI59-PxID-GzTTao_CpBO4nsQiHRuad5GH-Pcp80Z8r8gndFl1rGrPYmt_l_MtvRuYDNIRQTUafl2w2lH-RTnFTknNiRsQp1WMG8wYTbm-JUgdNYFE53coUyhr5tpfH5RvOCkJiMvYnQ6Z9pvBE18wJV45gLmd'
-  },
-  {
-    id: 2,
-    name: 'Glassware Crafts Co.',
-    status: 'Menunggu Kontrak',
-    statusClass: 'bg-secondary-container text-on-secondary-container',
-    description: 'Kemasan Kaca & Bambu Berkelanjutan',
-    contactName: 'Siti Aminah',
-    contactEmail: '+62 812-992-001',
-    contactIcon: 'call',
-    lastDelivery: '28 Sep 2023',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAE97P0MxHLDkW8UmMR4q_pBjH8bIKS2iX4Wyw2ezBRl36-it0F2S1iznOJydjzQ6Opi0UDcXPpy2aUkaQ1shUxK8Gv5Dr5wWzbFMxtm32T6-9JDmadSzZk6cjPBeBeabGnoRAD6nnEB22Rk5z_CDWj1KDqpk2sSHku8iIyh5ZK0cJi8q6qpWsEsxq8QtmY5V59GSbzdu8gTe634BkkhBE55HP3VKR51I2LWyrrhM8--s9zhdi1uzcwGX-p-18fNX5lq50ndqm_1mNc'
-  },
-  {
-    id: 3,
-    name: 'Mount Agung Herbs',
-    status: 'Ditangguhkan',
-    statusClass: 'bg-error-container text-on-error-container',
-    description: 'Botani Dataran Tinggi Premium',
-    contactName: 'Dewa Ketut',
-    contactEmail: 'ketut@agung.id',
-    contactIcon: 'mail',
-    lastDelivery: '14 Agu 2023',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC46De51g12QFxneEkfY7ZHSIfg3jeKpSf9ATkuCQEO6m26zQwZFAr8yglAc_kXV1oHlPpIQEN6XzAHakHxN1_WNdMO7Sn7eeF1maljiksnkAwfjI6Uwd6i57bTGJZkC95aZJHjp9NMazppnH0j6jOWL6UboIGZSyJ-6PhM3PKdi28nl4DsRBbc3ZdlZuM0ayVQAr3hlgZXZFi3sTVqbvKqSLbplJU7WUJVzPIi3ywQ5Wwj2AbrJB40Y4EKbfGI00XhTleJ02zP5_ZA'
-  }
-];
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+
+interface Supplier {
+  id_produsen: number;
+  nama_produsen: string;
+  alamat: string | null;
+  kota: string | null;
+  kontak: string | null;
+  email: string | null;
+  status: 'aktif' | 'menunggu' | 'ditangguhkan';
+  created_at: string;
+}
+
+function getStatusStyle(status: string) {
+  const map: Record<string, string> = {
+    aktif:        'bg-tertiary-fixed text-on-tertiary-fixed-variant',
+    menunggu:     'bg-secondary-container text-on-secondary-container',
+    ditangguhkan: 'bg-error-container text-on-error-container',
+  };
+  return map[status] ?? 'bg-surface-container text-on-surface-variant';
+}
+
+function getStatusLabel(status: string) {
+  const map: Record<string, string> = {
+    aktif:        'Aktif',
+    menunggu:     'Menunggu Kontrak',
+    ditangguhkan: 'Ditangguhkan',
+  };
+  return map[status] ?? status;
+}
+
+async function fetchSuppliers(filter: string): Promise<Supplier[]> {
+  const params = filter && filter !== 'semua' ? `?status=${filter}` : '';
+  const res = await fetch(`/api/supplier${params}`);
+  if (!res.ok) throw new Error('Gagal memuat pemasok');
+  const json = await res.json();
+  return Array.isArray(json.data) ? json.data : [];
+}
+
+const ITEMS_PER_PAGE = 5;
 
 export default function SupplierDirectory() {
+  const [filter, setFilter] = useState('semua');
+  const [page, setPage] = useState(1);
+
+  const { data: suppliers = [], isLoading, error } = useQuery({
+    queryKey: ['suppliers', filter],
+    queryFn: () => fetchSuppliers(filter),
+  });
+
+  const totalPages = Math.ceil(suppliers.length / ITEMS_PER_PAGE);
+  const paged = suppliers.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+
+  const handleFilter = (f: string) => { setFilter(f); setPage(1); };
+
   return (
     <div className="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 overflow-hidden h-full flex flex-col">
+      {/* Filter Bar */}
       <div className="p-4 sm:p-8 border-b border-surface-container bg-surface-container-low/20">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex flex-wrap gap-2 sm:gap-4">
-            <button className="px-4 py-2 bg-surface-container-high text-primary font-bold text-xs rounded-lg shadow-sm">Semua Pemasok</button>
-            <button className="px-4 py-2 text-on-surface-variant/80 font-bold text-xs rounded-lg hover:bg-surface-container-low transition-colors">Rempah Mentah</button>
-            <button className="px-4 py-2 text-on-surface-variant/80 font-bold text-xs rounded-lg hover:bg-surface-container-low transition-colors">Kemasan</button>
+            {['semua', 'aktif', 'menunggu', 'ditangguhkan'].map((f) => (
+              <button
+                key={f}
+                onClick={() => handleFilter(f)}
+                className={`px-4 py-2 font-bold text-xs rounded-lg transition-colors capitalize ${
+                  filter === f
+                    ? 'bg-surface-container-high text-primary shadow-sm'
+                    : 'text-on-surface-variant/80 hover:bg-surface-container-low'
+                }`}
+              >
+                {f === 'semua' ? 'Semua Pemasok' : getStatusLabel(f)}
+              </button>
+            ))}
           </div>
-          <button className="flex items-center gap-2 text-xs font-bold text-primary hover:bg-surface-container-low px-3 py-2 rounded-lg transition-colors">
-            <span className="material-symbols-outlined text-lg">filter_list</span>
-            Konfigurasi Filter
-          </button>
         </div>
       </div>
 
-      {/* Supplier List */}
+      {/* List */}
       <div className="divide-y divide-surface-container/50 flex-1">
-        {suppliers.map((supplier) => (
-          <div key={supplier.id} className="p-4 sm:p-8 hover:bg-surface-container-low/40 transition-colors group">
+        {isLoading && (
+          <div className="flex items-center justify-center py-16 gap-3 text-on-surface/40">
+            <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-sm">Memuat pemasok...</span>
+          </div>
+        )}
+
+        {error && !isLoading && (
+          <div className="p-8 text-center text-sm text-on-error-container bg-error-container/20">
+            Gagal memuat data pemasok
+          </div>
+        )}
+
+        {!isLoading && !error && paged.length === 0 && (
+          <div className="p-12 text-center text-sm text-on-surface/40 font-medium">
+            Tidak ada pemasok ditemukan
+          </div>
+        )}
+
+        {!isLoading && !error && paged.map((supplier) => (
+          <div key={supplier.id_produsen} className="p-4 sm:p-8 hover:bg-surface-container-low/40 transition-colors group">
             <div className="flex flex-col md:flex-row items-start justify-between gap-6">
               <div className="flex flex-col sm:flex-row gap-6 w-full">
-                <div className="w-16 h-16 rounded-xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 ring-4 ring-surface-container group-hover:ring-primary/20 shrink-0">
-                  <img 
-                    alt={supplier.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                    src={supplier.image}
-                  />
+                {/* Avatar inisial */}
+                <div className="w-16 h-16 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center font-extrabold text-xl shrink-0 ring-4 ring-surface-container group-hover:ring-primary/20 transition-all">
+                  {supplier.nama_produsen.charAt(0).toUpperCase()}
                 </div>
+
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-3 mb-1">
-                    <h5 className="font-headline text-xl font-bold text-primary">{supplier.name}</h5>
-                    <span className={`px-2.5 py-1 ${supplier.statusClass} text-[10px] font-bold rounded shadow-sm uppercase tracking-wider`}>
-                      {supplier.status}
+                    <h5 className="font-headline text-xl font-bold text-primary">{supplier.nama_produsen}</h5>
+                    <span className={`px-2.5 py-1 ${getStatusStyle(supplier.status)} text-[10px] font-bold rounded shadow-sm uppercase tracking-wider`}>
+                      {getStatusLabel(supplier.status)}
                     </span>
                   </div>
-                  <p className="text-sm text-on-surface-variant font-medium mb-4">{supplier.description}</p>
-                  
+                  <p className="text-sm text-on-surface-variant font-medium mb-4">
+                    {supplier.kota ?? 'Lokasi tidak diketahui'}
+                  </p>
+
                   <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-on-surface-variant/80 font-medium">
-                    <div className="flex items-center gap-2 bg-surface-container-low px-2.5 py-1.5 rounded-md">
-                      <span className="material-symbols-outlined text-sm">person</span>
-                      <span>{supplier.contactName}</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-surface-container-low px-2.5 py-1.5 rounded-md">
-                      <span className="material-symbols-outlined text-sm">{supplier.contactIcon}</span>
-                      <span>{supplier.contactEmail}</span>
-                    </div>
+                    {supplier.kontak && (
+                      <div className="flex items-center gap-2 bg-surface-container-low px-2.5 py-1.5 rounded-md">
+                        <span className="material-symbols-outlined text-sm">call</span>
+                        <span>{supplier.kontak}</span>
+                      </div>
+                    )}
+                    {supplier.email && (
+                      <div className="flex items-center gap-2 bg-surface-container-low px-2.5 py-1.5 rounded-md">
+                        <span className="material-symbols-outlined text-sm">mail</span>
+                        <span>{supplier.email}</span>
+                      </div>
+                    )}
+                    {!supplier.kontak && !supplier.email && (
+                      <span className="text-on-surface/30 italic">Kontak belum tersedia</span>
+                    )}
                   </div>
                 </div>
               </div>
-              
-              <div className="text-left md:text-right mt-4 md:mt-0 w-full md:w-auto bg-surface-container-low/30 md:bg-transparent p-4 md:p-0 rounded-xl">
-                <p className="text-[10px] sm:text-xs text-on-surface-variant/60 uppercase tracking-widest font-bold mb-1">Pengiriman Terakhir</p>
-                <p className="font-headline font-bold text-secondary text-sm sm:text-base">{supplier.lastDelivery}</p>
+
+              <div className="text-left md:text-right mt-4 md:mt-0 w-full md:w-auto">
+                <p className="text-[10px] sm:text-xs text-on-surface-variant/60 uppercase tracking-widest font-bold mb-1">Terdaftar</p>
+                <p className="font-headline font-bold text-secondary text-sm sm:text-base">
+                  {new Date(supplier.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </p>
                 <button className="mt-2 md:mt-4 text-primary font-bold text-xs flex items-center gap-1 md:float-right group-hover:translate-x-1 transition-transform p-1">
                   Lihat Detail <span className="material-symbols-outlined text-sm">arrow_forward</span>
                 </button>
@@ -101,16 +152,24 @@ export default function SupplierDirectory() {
         ))}
       </div>
 
-      {/* Footer Pagination */}
+      {/* Pagination Footer */}
       <div className="p-6 sm:p-8 bg-surface-container-low/30 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-surface-container">
         <span className="text-xs font-bold text-on-surface-variant/60 tracking-wide uppercase">
-          Menampilkan 1-12 dari 124 Pemasok
+          Menampilkan {Math.min((page - 1) * ITEMS_PER_PAGE + 1, suppliers.length)}–{Math.min(page * ITEMS_PER_PAGE, suppliers.length)} dari {suppliers.length} Pemasok
         </span>
         <div className="flex gap-2">
-          <button className="w-10 h-10 flex items-center justify-center bg-surface-container-lowest rounded-lg border border-outline-variant/20 text-on-surface-variant hover:bg-primary hover:text-white hover:border-primary transition-colors shadow-sm">
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="w-10 h-10 flex items-center justify-center bg-surface-container-lowest rounded-lg border border-outline-variant/20 text-on-surface-variant hover:bg-primary hover:text-white hover:border-primary transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+          >
             <span className="material-symbols-outlined text-sm">chevron_left</span>
           </button>
-          <button className="w-10 h-10 flex items-center justify-center bg-primary rounded-lg text-white shadow-md">
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={page >= totalPages}
+            className="w-10 h-10 flex items-center justify-center bg-primary rounded-lg text-white shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+          >
             <span className="material-symbols-outlined text-sm">chevron_right</span>
           </button>
         </div>

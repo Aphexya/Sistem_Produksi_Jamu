@@ -16,11 +16,11 @@ router.post('/login', async (req, res) => {
     if (!valid) return res.status(401).json({ message: 'Username atau password salah' });
 
     const token = jwt.sign(
-      { id_user: user.id_user, username: user.username },
+      { id_user: user.id_user, username: user.username, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }
     );
-    res.json({ token, user: { id_user: user.id_user, username: user.username, email: user.email } });
+    res.json({ token, user: { id_user: user.id_user, username: user.username, email: user.email, role: user.role } });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -28,15 +28,24 @@ router.post('/login', async (req, res) => {
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
-  const { id_kota, username, email, password } = req.body;
+  const { id_kota, username, email, password, role } = req.body;
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'Username, email, dan password wajib diisi' });
+  }
   try {
     const hashed = await bcrypt.hash(password, 10);
     const [result] = await db.query(
-      'INSERT INTO user (id_kota, username, email, pw) VALUES (?, ?, ?, ?)',
-      [id_kota, username, email, hashed]
+      'INSERT INTO user (id_kota, username, email, pw, role) VALUES (?, ?, ?, ?, ?)',
+      [id_kota || null, username, email, hashed, role || 'staff']
     );
-    res.status(201).json({ id_user: result.insertId, username, email });
+    res.status(201).json({
+      message: 'Registrasi berhasil',
+      data: { id_user: result.insertId, username, email, role: role || 'staff' }
+    });
   } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ message: 'Username atau email sudah digunakan' });
+    }
     res.status(500).json({ message: err.message });
   }
 });

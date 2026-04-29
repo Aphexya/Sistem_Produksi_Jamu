@@ -3,14 +3,46 @@ const router = express.Router();
 const db = require('../config/db');
 const { authenticate } = require('../middleware/auth');
 
-// GET /api/jamu - dengan komposisi dan khasiat
+// GET /api/jamu - list jamu dengan filter opsional
+// Query params: ?jenis=pil&search=kunyit&khasiat=stamina&rempah=jahe
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await db.query(`
-      SELECT j.id_jamu, j.nama_jamu, j.ket_jamu, u.username AS pembuat
+    const { jenis, search, khasiat, rempah } = req.query;
+    let sql = `
+      SELECT DISTINCT j.id_jamu, j.nama_jamu, j.ket_jamu, j.jenis, j.perizinan,
+             p.nama_produsen AS produsen, u.username AS pembuat
       FROM jamu j
       LEFT JOIN user u ON j.id_user = u.id_user
-    `);
+      LEFT JOIN produsen p ON j.id_produsen = p.id_produsen
+    `;
+    const params = [];
+    const conditions = [];
+
+    if (jenis) {
+      conditions.push('j.jenis = ?');
+      params.push(jenis);
+    }
+    if (search) {
+      conditions.push('(j.nama_jamu LIKE ? OR j.ket_jamu LIKE ?)');
+      params.push(`%${search}%`, `%${search}%`);
+    }
+    if (khasiat) {
+      sql += ' LEFT JOIN khasiat_jamu kj ON j.id_jamu = kj.id_jamu LEFT JOIN khasiat kh ON kj.id_khasiat = kh.id_khasiat';
+      conditions.push('kh.khasiat LIKE ?');
+      params.push(`%${khasiat}%`);
+    }
+    if (rempah) {
+      sql += ' LEFT JOIN komposisi ko ON j.id_jamu = ko.id_jamu LEFT JOIN rempah r ON ko.id_rempah = r.id_rempah';
+      conditions.push('r.nama_rempah LIKE ?');
+      params.push(`%${rempah}%`);
+    }
+
+    if (conditions.length > 0) {
+      sql += ' WHERE ' + conditions.join(' AND ');
+    }
+    sql += ' ORDER BY j.nama_jamu ASC';
+
+    const [rows] = await db.query(sql, params);
     res.json(rows);
   } catch (err) {
     res.status(500).json({ message: err.message });
