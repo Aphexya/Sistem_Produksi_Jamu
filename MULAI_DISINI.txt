@@ -10,11 +10,12 @@
 
 ❓ Login pakai email dan password apa?
 
-   ✅ Username: admin
+   ✅ Email: admin@penjamuhandal.id
    ✅ Password: admin123
    
-   ⚠️  PENTING: Di form login, label-nya "Alamat Email" tapi ISI DENGAN 
-       USERNAME "admin", bukan email!
+   💡 ATAU bisa juga pakai username:
+   ✅ Username: admin
+   ✅ Password: admin123
 
 
 ❓ Port 5173 atau 3000? Yang mana yang benar?
@@ -121,6 +122,10 @@
    2. Ketik: http://localhost:5173
    3. Halaman login akan muncul
    4. Login dengan:
+      • Email: admin@penjamuhandal.id
+      • Password: admin123
+      
+      ATAU pakai username:
       • Username: admin
       • Password: admin123
 
@@ -138,6 +143,10 @@
    └──────────────┴─────────────────────────────────────────────────┘
 
    ┌──────────────┬─────────────────────────────────────────────────┐
+   │ Email        │ admin@penjamuhandal.id                          │
+   │ Password     │ admin123                                        │
+   │              │                                                 │
+   │ ATAU:        │                                                 │
    │ Username     │ admin                                           │
    │ Password     │ admin123                                        │
    └──────────────┴─────────────────────────────────────────────────┘
@@ -157,7 +166,7 @@
       → Restart komputer atau tutup aplikasi yang pakai port 3000/5173
    
    ❌ "Invalid credentials"
-      → Username: admin (bukan email!)
+      → Email: admin@penjamuhandal.id (atau username: admin)
       → Password: admin123
    
    ❌ Halaman tidak muncul

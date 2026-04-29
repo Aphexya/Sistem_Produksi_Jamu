@@ -168,8 +168,10 @@ INSERT IGNORE INTO `kota` (`id_kota`, `nama_kota`, `ket_kota`) VALUES
 
 -- ------------------------------------------------------------
 -- Data awal: Admin default
--- username : admin
--- password : admin123
+-- Email    : admin@penjamuhandal.id
+-- Username : admin
+-- Password : admin123
+-- (Bisa login dengan email ATAU username)
 -- ------------------------------------------------------------
 INSERT IGNORE INTO `user` (`id_user`, `id_kota`, `username`, `email`, `pw`, `role`) VALUES
   (1, 1, 'admin', 'admin@penjamuhandal.id',

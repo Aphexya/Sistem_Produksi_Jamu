@@ -119,9 +119,17 @@ Sistem_Produksi_Jamu/
 
 ## 🔐 AKUN DEFAULT
 
-| Username | Password | Role | Email |
-|----------|----------|------|-------|
-| `admin` | `admin123` | admin | admin@penjamuhandal.id |
+**Login dengan Email:**
+| Email | Password | Role |
+|-------|----------|------|
+| `admin@penjamuhandal.id` | `admin123` | admin |
+
+**ATAU Login dengan Username:**
+| Username | Password | Role |
+|----------|----------|------|
+| `admin` | `admin123` | admin |
+
+**Keduanya bisa digunakan!** Backend mendukung login dengan email atau username.
 
 ---
 
@@ -246,7 +254,8 @@ Sistem_Produksi_Jamu/
 → Tutup aplikasi lain atau restart komputer
 
 ### **Error: "Invalid credentials"**
-→ Pastikan username = `admin` (bukan email!)
+→ Gunakan email: `admin@penjamuhandal.id` atau username: `admin`
+→ Password: `admin123`
 
 ### **Halaman login tidak muncul**
 → Pastikan frontend server sudah jalan dan buka http://localhost:5173

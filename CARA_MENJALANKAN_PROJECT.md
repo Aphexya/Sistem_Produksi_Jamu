@@ -136,12 +136,15 @@ npm run dev
 
 Gunakan akun admin default:
 
+**Opsi 1 - Login dengan Email:**
+- **Email:** `admin@penjamuhandal.id`
+- **Password:** `admin123`
+
+**Opsi 2 - Login dengan Username:**
 - **Username:** `admin`
 - **Password:** `admin123`
 
-**CATATAN PENTING:** 
-- Di form login, label-nya tertulis "Alamat Email" tapi **isi dengan USERNAME**, bukan email!
-- Ini bug UI kecil yang belum diperbaiki, tapi fungsionalitasnya benar.
+**Keduanya bisa digunakan!** Backend sudah mendukung login dengan email atau username.
 
 ---
 
@@ -223,9 +226,10 @@ Import ulang database `jamu.sql` di phpMyAdmin (lihat STEP 2).
 
 **Cek:**
 1. Apakah sudah import `jamu.sql`?
-2. Apakah username = `admin` (bukan email)?
-3. Apakah password = `admin123`?
-4. Cek di phpMyAdmin, tabel `user`, apakah ada user dengan username `admin`?
+2. Gunakan salah satu:
+   - Email: `admin@penjamuhandal.id` + Password: `admin123`
+   - Username: `admin` + Password: `admin123`
+3. Cek di phpMyAdmin, tabel `user`, apakah ada user dengan username `admin`?
 
 ---
 

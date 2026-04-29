@@ -129,6 +129,18 @@ curl http://localhost:3000/health
 
 ### Login Admin Default
 
+**Opsi 1 - Login dengan Email:**
+```bash
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@penjamuhandal.id",
+  "password": "admin123"
+}
+```
+
+**Opsi 2 - Login dengan Username:**
 ```bash
 POST /api/auth/login
 Content-Type: application/json
@@ -138,6 +150,8 @@ Content-Type: application/json
   "password": "admin123"
 }
 ```
+
+**Keduanya bisa digunakan!** Backend mendukung login dengan email atau username.
 
 Response:
 ```json

@@ -5,22 +5,48 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
 // POST /api/auth/login
+// Menerima email atau username
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
+  const loginIdentifier = email || username; // Terima email atau username
+  
+  if (!loginIdentifier || !password) {
+    return res.status(400).json({ message: 'Email/username dan password wajib diisi' });
+  }
+
   try {
-    const [rows] = await db.query('SELECT * FROM user WHERE username = ?', [username]);
-    if (!rows.length) return res.status(401).json({ message: 'Username atau password salah' });
+    // Cari user berdasarkan email ATAU username
+    const [rows] = await db.query(
+      'SELECT * FROM user WHERE email = ? OR username = ?',
+      [loginIdentifier, loginIdentifier]
+    );
+    
+    if (!rows.length) {
+      return res.status(401).json({ message: 'Email/username atau password salah' });
+    }
 
     const user = rows[0];
     const valid = await bcrypt.compare(password, user.pw);
-    if (!valid) return res.status(401).json({ message: 'Username atau password salah' });
+    
+    if (!valid) {
+      return res.status(401).json({ message: 'Email/username atau password salah' });
+    }
 
     const token = jwt.sign(
       { id_user: user.id_user, username: user.username, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }
     );
-    res.json({ token, user: { id_user: user.id_user, username: user.username, email: user.email, role: user.role } });
+    
+    res.json({ 
+      token, 
+      user: { 
+        id_user: user.id_user, 
+        username: user.username, 
+        email: user.email, 
+        role: user.role 
+      } 
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
