@@ -2,6 +2,8 @@ SISTEM PRODUKSI JAMU
 
 Sistem manajemen produksi jamu tradisional Madura berbasis web.
 
+Aplikasi ini membantu mengelola resep, inventaris bahan, supplier, dan batch produksi jamu.
+
 CARA MENJALANKAN PROJECT
 
 Persiapan Awal (sekali saja)
