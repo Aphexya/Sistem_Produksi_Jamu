@@ -11,6 +11,15 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
+        // Teruskan cookie (HttpOnly) antara frontend dev-server dan backend
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq, req) => {
+            // Pastikan cookie ikut diteruskan
+            if (req.headers.cookie) {
+              proxyReq.setHeader('cookie', req.headers.cookie);
+            }
+          });
+        },
       },
     },
   },

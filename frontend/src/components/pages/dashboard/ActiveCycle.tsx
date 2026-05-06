@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 
+interface Jamu {
+  nama_jamu: string;
+  jenis?: string;
+}
+
 interface Batch {
   id_produksi: number;
   kode_batch: string;
-  nama_jamu: string;
+  jamu: Jamu | null;          // nested object dari Sequelize include
   status: 'antrian' | 'ekstraksi' | 'botolisasi' | 'selesai';
   ukuran_batch: number;
 }
@@ -59,7 +64,7 @@ export default function ActiveCycle() {
             {isLoading
               ? 'Memuat data...'
               : batch
-                ? `Batch Aktif: ${batch.kode_batch} (${batch.nama_jamu})`
+                ? `Batch Aktif: ${batch.kode_batch} (${batch.jamu?.nama_jamu ?? '—'})`
                 : 'Tidak ada batch yang sedang berjalan'}
           </p>
         </div>

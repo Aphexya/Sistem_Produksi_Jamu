@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import Sidebar from '../components/layout/Sidebar';
-import TopBar from '../components/layout/TopBar';
+import AppShell from '../components/layout/AppShell';
 import ReportsHeader from '../components/pages/reports/ReportsHeader';
 import ReportsMetrics from '../components/pages/reports/ReportsMetrics';
 import ReportsVolumeChart from '../components/pages/reports/ReportsVolumeChart';
@@ -15,25 +14,19 @@ export default function Reports() {
         <meta name="description" content="Laporan analitik produksi dan keseimbangan efisiensi bahan Penjamu Handal." />
       </Helmet>
 
-      <div className="bg-background text-on-background min-h-screen overflow-x-hidden font-body flex">
-        <Sidebar />
+      <AppShell>
+        <main className="p-4 sm:p-6 md:p-10 max-w-[1400px] w-full mx-auto space-y-10 pb-24">
+          <ReportsHeader />
+          <ReportsMetrics />
 
-        <div className="flex-1 lg:ml-72 flex flex-col w-full">
-          <TopBar />
+          <section className="grid grid-cols-1 xl:grid-cols-3 gap-10">
+            <ReportsVolumeChart />
+            <ReportsStock />
+          </section>
 
-          <main className="p-6 md:p-10 max-w-[1400px] w-full mx-auto space-y-10 pb-24">
-            <ReportsHeader />
-            <ReportsMetrics />
-            
-            <section className="grid grid-cols-1 xl:grid-cols-3 gap-10">
-              <ReportsVolumeChart />
-              <ReportsStock />
-            </section>
-            
-            <ReportsTable />
-          </main>
-        </div>
-      </div>
+          <ReportsTable />
+        </main>
+      </AppShell>
     </>
   );
 }

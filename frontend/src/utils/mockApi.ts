@@ -78,6 +78,38 @@ export function setupMockApi() {
   (window.fetch as any) = async (url: string | Request, options?: RequestInit) => {
     const urlString = typeof url === 'string' ? url : url.url;
 
+    // Mock GET /api/bahan/summary
+    if (urlString.includes('/api/bahan/summary') && (!options?.method || options?.method === 'GET')) {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      // Hitung dari data mock yang ada
+      let totalKritis = 0;
+      let totalKosong = 0;
+      let totalAman   = 0;
+
+      for (const item of mockBahanList) {
+        const stok      = parseFloat(item.stokAwal);
+        const threshold = parseFloat(item.threshold ?? 10);
+
+        if (stok <= 0)              totalKosong++;
+        else if (stok <= threshold) totalKritis++;
+        else                        totalAman++;
+      }
+
+      return new Response(JSON.stringify({
+        data: {
+          total:          mockBahanList.length,
+          totalKritis,
+          totalKosong,
+          totalAman,
+          totalPerhatian: totalKritis + totalKosong,
+        },
+      }), {
+        status: 200,
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      });
+    }
+
     // Mock GET /api/bahan
     if (urlString.includes('/api/bahan') && (!options?.method || options?.method === 'GET')) {
       console.log('[MOCK API] GET /api/bahan');

@@ -1,10 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 
+interface Jamu {
+  nama_jamu: string;
+  jenis?: string | null;
+}
+
 interface Batch {
   id_produksi: number;
   kode_batch: string;
-  nama_jamu: string;
-  jenis: string | null;
+  jamu: Jamu | null;
   volume_output: number | null;
   efisiensi: number | null;
   status: string;
@@ -91,9 +95,9 @@ export default function ReportsTable() {
                   <tr key={batch.id_produksi} className="hover:bg-surface-container-low/50 transition-colors group">
                     <td className="px-8 py-6 font-bold text-primary font-mono">{batch.kode_batch}</td>
                     <td className="px-8 py-6">
-                      <div className="font-bold text-on-surface capitalize">{batch.nama_jamu}</div>
-                      {batch.jenis && (
-                        <div className="text-xs text-on-surface-variant font-medium capitalize">{batch.jenis}</div>
+                      <div className="font-bold text-on-surface capitalize">{batch.jamu?.nama_jamu ?? '—'}</div>
+                      {batch.jamu?.jenis && (
+                        <div className="text-xs text-on-surface-variant font-medium capitalize">{batch.jamu.jenis}</div>
                       )}
                     </td>
                     <td className="px-8 py-6 font-bold text-on-surface-variant">

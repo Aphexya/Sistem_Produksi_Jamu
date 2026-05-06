@@ -1,14 +1,22 @@
-const mysql = require('mysql2/promise');
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'jamu',
-  waitForConnections: true,
-  connectionLimit: 10,
-});
+const sequelize = new Sequelize(
+  process.env.DB_NAME || 'jamu',
+  process.env.DB_USER || 'root',
+  process.env.DB_PASSWORD || '',
+  {
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 3306,
+    dialect: 'mysql',
+    logging: false, // set ke console.log untuk debug query SQL
+    pool: {
+      max: 10,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+  }
+);
 
-module.exports = pool;
+module.exports = sequelize;

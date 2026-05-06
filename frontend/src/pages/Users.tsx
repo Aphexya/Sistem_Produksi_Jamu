@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import Sidebar from '../components/layout/Sidebar';
-import TopBar from '../components/layout/TopBar';
+import AppShell from '../components/layout/AppShell';
 import UsersHeader from '../components/pages/users/UsersHeader';
 import UsersMetrics from '../components/pages/users/UsersMetrics';
 import UsersTable from '../components/pages/users/UsersTable';
@@ -14,20 +13,14 @@ export default function Users() {
         <meta name="description" content="Manajemen tata kelola akses dan peran staf laboratorium Penjamu Handal." />
       </Helmet>
 
-      <div className="bg-background text-on-background min-h-screen overflow-x-hidden font-body flex">
-        <Sidebar className="hidden lg:flex" />
-
-        <div className="flex-1 lg:ml-72 flex flex-col w-full min-h-screen">
-          <TopBar />
-
-          <main className="p-6 md:p-12 w-full max-w-[1300px] mx-auto pb-24 flex-1">
-            <UsersHeader />
-            <UsersMetrics />
-            <UsersTable />
-            <UsersFooter />
-          </main>
-        </div>
-      </div>
+      <AppShell>
+        <main className="p-4 sm:p-6 md:p-12 w-full max-w-[1300px] mx-auto pb-24 flex-1">
+          <UsersHeader />
+          <UsersMetrics />
+          <UsersTable />
+          <UsersFooter />
+        </main>
+      </AppShell>
     </>
   );
 }

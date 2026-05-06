@@ -1,10 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
+interface Jamu {
+  nama_jamu: string;
+}
+
 interface Batch {
   id_produksi: number;
   kode_batch: string;
-  nama_jamu: string;
+  jamu: Jamu | null;
   ukuran_batch: number;
   volume_output: number | null;
   status: 'antrian' | 'ekstraksi' | 'botolisasi' | 'selesai';
@@ -58,7 +62,7 @@ export default function ProductionQueue() {
                 {new Date(batch.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
               </span>
             </div>
-            <h4 className="text-lg font-bold text-primary mb-1 capitalize">{batch.nama_jamu}</h4>
+            <h4 className="text-lg font-bold text-primary mb-1 capitalize">{batch.jamu?.nama_jamu ?? '—'}</h4>
             <p className="text-sm text-on-surface-variant mb-4">
               Batch: {batch.ukuran_batch ?? '—'} kg
               {batch.volume_output ? ` | Output: ${batch.volume_output} L` : ''}

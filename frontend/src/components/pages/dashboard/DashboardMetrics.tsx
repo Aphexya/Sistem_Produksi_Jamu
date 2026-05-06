@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useBahanSummary } from '../../../hooks/useSpiceStock';
 
 interface Metrics {
   totalBatch: number;
@@ -21,9 +22,12 @@ export default function DashboardMetrics() {
     refetchInterval: 30_000, // refresh tiap 30 detik
   });
 
-  const totalBatch    = isLoading ? '—' : (data?.totalBatch ?? 0);
+  const { summary, isLoading: isLoadingBahan } = useBahanSummary();
+
+  const totalBatch = isLoading ? '—' : (data?.totalBatch ?? 0);
   const produksiAktif = isLoading ? '—' : (data?.produksiAktif ?? 0);
-  const stokKritis    = isLoading ? '—' : String(data?.stokKritis ?? 0).padStart(2, '0');
+  const stokKritisCount = isLoadingBahan ? '—' : String(summary.totalPerhatian).padStart(2, '0');
+  const stokKosongCount = summary.totalKosong;
 
   return (
     <section>
@@ -56,14 +60,16 @@ export default function DashboardMetrics() {
               Stok Kritis
             </span>
             <div className="flex items-baseline gap-2">
-              <span className={`text-5xl font-extrabold text-on-error-container font-headline ${isLoading ? 'animate-pulse' : ''}`}>
-                {stokKritis}
+              <span className={`text-5xl font-extrabold text-on-error-container font-headline ${isLoadingBahan ? 'animate-pulse' : ''}`}>
+                {stokKritisCount}
               </span>
               <span className="text-on-error-container/70 font-semibold text-sm">Tindakan diperlukan</span>
             </div>
             <p className="text-sm text-on-error-container/80">
-              {data?.stokKosong ? `${data.stokKosong} bahan habis, ` : ''}
-              {data?.stokKritis ? `${data.stokKritis} bahan di bawah batas minimum.` : 'Semua stok aman.'}
+              {stokKosongCount > 0 ? `${stokKosongCount} bahan habis. ` : ''}
+              {summary.totalPerhatian > 0
+                ? `${summary.totalKritis} bahan di bawah batas minimum.`
+                : 'Semua stok aman.'}
             </p>
           </div>
           <span className="material-symbols-outlined absolute -right-4 -bottom-4 text-9xl text-on-error-container/10">

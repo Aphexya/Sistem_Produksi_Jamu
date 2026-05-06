@@ -2,13 +2,17 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
+interface Produsen {
+  nama_produsen: string;
+}
+
 interface Jamu {
   id_jamu: number;
   nama_jamu: string;
   ket_jamu: string | null;
   jenis: string | null;
   perizinan: string | null;
-  produsen: string | null;
+  produsen: Produsen | null;   // nested object dari Sequelize include
 }
 
 // Warna kategori berdasarkan jenis
@@ -58,7 +62,7 @@ export default function RecipeGrid() {
   return (
     <div className="space-y-8">
       {/* Search bar */}
-      <div className="relative max-w-md">
+      <div className="relative w-full sm:max-w-md">
         <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-[20px]">search</span>
         <input
           type="text"
@@ -90,7 +94,9 @@ export default function RecipeGrid() {
           {paged.map((jamu, index) => (
             <div
               key={jamu.id_jamu}
-              className={`bg-surface-container-lowest rounded-xl overflow-hidden group hover:shadow-xl transition-all duration-500 border border-transparent hover:border-outline-variant/20 flex flex-col shadow-sm ${index % 2 !== 0 ? 'xl:mt-6' : ''}`}
+              className={`bg-surface-container-lowest rounded-xl overflow-hidden group hover:shadow-xl transition-all duration-500 border border-transparent hover:border-outline-variant/20 flex flex-col shadow-sm ${
+                index % 2 !== 0 ? 'xl:mt-6' : ''
+              }`}
             >
               <div className="h-48 overflow-hidden relative bg-surface-container-high">
                 <img
@@ -123,7 +129,7 @@ export default function RecipeGrid() {
                 {jamu.produsen && (
                   <p className="text-xs text-on-surface/40 font-medium mb-4">
                     <span className="material-symbols-outlined text-[12px] mr-1 align-middle">factory</span>
-                    {jamu.produsen}
+                    {jamu.produsen.nama_produsen}
                   </p>
                 )}
 
@@ -161,7 +167,7 @@ export default function RecipeGrid() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 pt-4">
+        <div className="flex justify-center items-center gap-1.5 sm:gap-2 pt-4 flex-wrap">
           <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}
