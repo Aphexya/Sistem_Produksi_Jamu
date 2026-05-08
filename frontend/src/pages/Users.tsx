@@ -8,6 +8,7 @@ import UsersMetrics from '../components/pages/users/UsersMetrics';
 import UsersTable from '../components/pages/users/UsersTable';
 import UsersFooter from '../components/pages/users/UsersFooter';
 import UsersDialog, { type UserFormState } from '../components/pages/users/UsersDialog';
+import UsersDeleteDialog from '../components/pages/users/UsersDeleteDialog';
 import {
   createUser,
   deleteUser,
@@ -55,6 +56,7 @@ export default function Users() {
     user: null,
   });
   const [formData, setFormData] = useState<UserFormState>(initialFormState);
+  const [deleteTarget, setDeleteTarget] = useState<UserRecord | null>(null);
 
   const {
     data: users = [],
@@ -118,6 +120,7 @@ export default function Users() {
     mutationFn: deleteUser,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['users'] });
+      setDeleteTarget(null);
       toast.success('Pengguna dihapus');
     },
     onError: (mutationError: Error) => {
@@ -141,9 +144,18 @@ export default function Users() {
   };
 
   const handleDeleteUser = (user: UserRecord) => {
-    const confirmed = window.confirm(`Hapus pengguna "${user.username}"?`);
-    if (confirmed) {
-      deleteMutation.mutate(user.id_user);
+    setDeleteTarget(user);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    if (!deleteMutation.isPending) {
+      setDeleteTarget(null);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteTarget) {
+      deleteMutation.mutate(deleteTarget.id_user);
     }
   };
 
@@ -212,6 +224,12 @@ export default function Users() {
             onClose={handleCloseModal}
             onSubmit={handleSubmit}
             isSaving={saveMutation.isPending}
+          />
+          <UsersDeleteDialog
+            user={deleteTarget}
+            isDeleting={deleteMutation.isPending}
+            onCancel={handleCloseDeleteDialog}
+            onConfirm={handleConfirmDelete}
           />
         </main>
       </AppShell>

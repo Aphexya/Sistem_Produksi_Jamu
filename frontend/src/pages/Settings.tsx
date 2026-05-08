@@ -1,11 +1,14 @@
 import { Helmet } from 'react-helmet-async';
+import { useState } from 'react';
 import AppShell from '../components/layout/AppShell';
-import SettingsTabs from '../components/pages/settings/SettingsTabs';
+import SettingsTabs, { type SettingsTab } from '../components/pages/settings/SettingsTabs';
 import ProfileSection from '../components/pages/settings/ProfileSection';
 import SystemThresholds from '../components/pages/settings/SystemThresholds';
 import UserManagement from '../components/pages/settings/UserManagement';
 
 export default function Settings() {
+  const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
+
   return (
     <>
       <Helmet>
@@ -28,10 +31,10 @@ export default function Settings() {
 
             {/* Content Area */}
             <div className="px-4 sm:px-6 md:px-12">
-              <SettingsTabs />
-              <ProfileSection />
-              <SystemThresholds />
-              <UserManagement />
+              <SettingsTabs activeTab={activeTab} onChange={setActiveTab} />
+              {activeTab === 'profile' && <ProfileSection />}
+              {activeTab === 'thresholds' && <SystemThresholds />}
+              {activeTab === 'users' && <UserManagement />}
             </div>
           </main>
         </div>

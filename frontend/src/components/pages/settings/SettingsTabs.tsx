@@ -1,9 +1,37 @@
-export default function SettingsTabs() {
+export type SettingsTab = 'profile' | 'thresholds' | 'users';
+
+interface SettingsTabsProps {
+  activeTab: SettingsTab;
+  onChange: (tab: SettingsTab) => void;
+}
+
+const tabs: Array<{ value: SettingsTab; label: string }> = [
+  { value: 'profile', label: 'PROFIL' },
+  { value: 'thresholds', label: 'AMBANG SISTEM' },
+  { value: 'users', label: 'MANAJEMEN PENGGUNA' },
+];
+
+export default function SettingsTabs({ activeTab, onChange }: SettingsTabsProps) {
   return (
-    <div className="flex gap-8 border-b border-outline-variant/15 overflow-x-auto pb-1 mb-10 w-full">
-      <button className="pb-4 border-b-4 border-primary text-primary font-bold text-sm tracking-wide shrink-0">PROFIL</button>
-      <button className="pb-4 border-b-4 border-transparent text-on-surface-variant hover:text-primary transition-colors font-medium text-sm tracking-wide shrink-0">AMBANG SISTEM</button>
-      <button className="pb-4 border-b-4 border-transparent text-on-surface-variant hover:text-primary transition-colors font-medium text-sm tracking-wide shrink-0">MANAJEMEN PENGGUNA</button>
+    <div className="mb-10 flex w-full gap-8 overflow-x-auto border-b border-outline-variant/15 pb-1">
+      {tabs.map((tab) => {
+        const isActive = activeTab === tab.value;
+
+        return (
+          <button
+            key={tab.value}
+            type="button"
+            onClick={() => onChange(tab.value)}
+            className={`shrink-0 border-b-4 pb-4 text-sm tracking-wide transition-colors ${
+              isActive
+                ? 'border-primary font-bold text-primary'
+                : 'border-transparent font-medium text-on-surface-variant hover:text-primary'
+            }`}
+          >
+            {tab.label}
+          </button>
+        );
+      })}
     </div>
   );
 }
