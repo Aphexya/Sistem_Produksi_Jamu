@@ -1,6 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { getRecipeImage } from './recipeImage';
+import Image from '../../Image';
+
+interface Produsen {
+  nama_produsen: string;
+}
 
 interface Jamu {
   id_jamu: number;
@@ -8,7 +14,7 @@ interface Jamu {
   ket_jamu: string | null;
   jenis: string | null;
   perizinan: string | null;
-  produsen: string | null;
+  produsen: Produsen | null;   // nested object dari Sequelize include
 }
 
 // Warna kategori berdasarkan jenis
@@ -24,9 +30,6 @@ function getCategoryStyle(jenis: string | null) {
   return map[jenis ?? ''] ?? 'bg-surface-container text-on-surface-variant';
 }
 
-// Gambar placeholder berdasarkan jenis
-const PLACEHOLDER_IMG = 'https://images.unsplash.com/photo-1615486511484-92e172e27bda?q=80&w=600&auto=format&fit=crop';
-
 async function fetchJamu(search: string): Promise<Jamu[]> {
   const params = search ? `?search=${encodeURIComponent(search)}` : '';
   const res = await fetch(`/api/jamu${params}`);
@@ -37,18 +40,49 @@ async function fetchJamu(search: string): Promise<Jamu[]> {
 
 const ITEMS_PER_PAGE = 6;
 
+function normalizeJenis(value: string | null | undefined) {
+  const normalized = (value ?? '').trim().toLowerCase();
+  return normalized || 'umum';
+}
+
+function formatJenisLabel(value: string) {
+  if (value === 'umum') {
+    return 'Umum';
+  }
+
+  return value
+    .split(/[\s/-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
 export default function RecipeGrid() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [activeCategory, setActiveCategory] = useState('all');
 
   const { data: allJamu = [], isLoading, error } = useQuery({
     queryKey: ['jamu-list', search],
     queryFn: () => fetchJamu(search),
   });
 
-  const totalPages = Math.ceil(allJamu.length / ITEMS_PER_PAGE);
-  const paged = allJamu.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const categories = useMemo(() => {
+    const values = Array.from(new Set(allJamu.map((item) => normalizeJenis(item.jenis))));
+    return values.sort((a, b) => a.localeCompare(b));
+  }, [allJamu]);
+
+  const filteredJamu = useMemo(() => {
+    if (activeCategory === 'all') {
+      return allJamu;
+    }
+
+    return allJamu.filter((item) => normalizeJenis(item.jenis) === activeCategory);
+  }, [activeCategory, allJamu]);
+
+  const totalPages = Math.ceil(filteredJamu.length / ITEMS_PER_PAGE);
+  const paged = filteredJamu.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -58,7 +92,7 @@ export default function RecipeGrid() {
   return (
     <div className="space-y-8">
       {/* Search bar */}
-      <div className="relative max-w-md">
+      <div className="relative w-full sm:max-w-md">
         <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-[20px]">search</span>
         <input
           type="text"
@@ -68,6 +102,43 @@ export default function RecipeGrid() {
           className="w-full bg-surface-container-low border-none rounded-xl pl-12 pr-4 py-3 focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
         />
       </div>
+
+      {!isLoading && !error && categories.length > 0 && (
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setActiveCategory('all');
+              setPage(1);
+            }}
+            className={`px-6 py-3 rounded-2xl text-sm font-bold transition-all border ${
+              activeCategory === 'all'
+                ? 'bg-primary text-on-primary border-primary shadow-[0_12px_30px_-18px_rgba(0,53,39,0.85)]'
+                : 'bg-surface-container-high/80 text-on-surface-variant border-transparent hover:bg-surface-container-highest'
+            }`}
+          >
+            Semua Formula
+          </button>
+
+          {categories.map((category) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => {
+                setActiveCategory(category);
+                setPage(1);
+              }}
+              className={`px-6 py-3 rounded-2xl text-sm font-bold capitalize transition-all border ${
+                activeCategory === category
+                  ? 'bg-surface-container-lowest text-primary border-primary shadow-[0_10px_24px_-20px_rgba(0,53,39,0.6)]'
+                  : 'bg-surface-container-high/80 text-on-surface-variant border-transparent hover:bg-surface-container-highest'
+              }`}
+            >
+              {formatJenisLabel(category)}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Loading */}
       {isLoading && (
@@ -90,14 +161,17 @@ export default function RecipeGrid() {
           {paged.map((jamu, index) => (
             <div
               key={jamu.id_jamu}
-              className={`bg-surface-container-lowest rounded-xl overflow-hidden group hover:shadow-xl transition-all duration-500 border border-transparent hover:border-outline-variant/20 flex flex-col shadow-sm ${index % 2 !== 0 ? 'xl:mt-6' : ''}`}
+              className={`bg-surface-container-lowest rounded-xl overflow-hidden group hover:shadow-xl transition-all duration-500 border border-transparent hover:border-outline-variant/20 flex flex-col shadow-sm ${
+                index % 2 !== 0 ? 'xl:mt-6' : ''
+              }`}
             >
               <div className="h-48 overflow-hidden relative bg-surface-container-high">
-                <img
+                <Image
+                  src={getRecipeImage(jamu.nama_jamu, jamu.jenis)}
                   alt={jamu.nama_jamu}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  src={PLACEHOLDER_IMG}
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  fallbackSrc="/jamu.jpg"
+                  wrapperClassName="absolute inset-0"
+                  className="group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute top-4 left-4">
                   <span className={`${getCategoryStyle(jamu.jenis)} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm capitalize`}>
@@ -123,7 +197,7 @@ export default function RecipeGrid() {
                 {jamu.produsen && (
                   <p className="text-xs text-on-surface/40 font-medium mb-4">
                     <span className="material-symbols-outlined text-[12px] mr-1 align-middle">factory</span>
-                    {jamu.produsen}
+                    {jamu.produsen.nama_produsen}
                   </p>
                 )}
 
@@ -137,31 +211,24 @@ export default function RecipeGrid() {
             </div>
           ))}
 
-          {/* Card tambah resep baru */}
-          <div
-            onClick={() => navigate('/production')}
-            className="border-2 border-dashed border-outline-variant/40 rounded-xl flex flex-col items-center justify-center p-12 group cursor-pointer hover:bg-surface-container-high/30 transition-all min-h-75"
-          >
-            <div className="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-sm">
-              <span className="material-symbols-outlined text-3xl text-outline">add_circle</span>
-            </div>
-            <h3 className="text-xl font-bold text-primary mb-2 font-headline">Buat Formula Baru</h3>
-            <p className="text-xs text-on-surface-variant text-center px-4 leading-relaxed">Mulai rancang kombinasi herbal baru untuk pengetesan laboratorium.</p>
-          </div>
         </div>
       )}
 
       {/* Empty state */}
-      {!isLoading && !error && allJamu.length === 0 && (
+      {!isLoading && !error && filteredJamu.length === 0 && (
         <div className="text-center py-16 text-on-surface/40">
           <span className="material-symbols-outlined text-5xl mb-4 block">search_off</span>
-          <p className="font-medium">Tidak ada resep ditemukan{search ? ` untuk "${search}"` : ''}</p>
+          <p className="font-medium">
+            Tidak ada resep ditemukan
+            {search ? ` untuk "${search}"` : ''}
+            {activeCategory !== 'all' ? ` pada kategori ${formatJenisLabel(activeCategory)}` : ''}
+          </p>
         </div>
       )}
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 pt-4">
+        <div className="flex justify-center items-center gap-1.5 sm:gap-2 pt-4 flex-wrap">
           <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}

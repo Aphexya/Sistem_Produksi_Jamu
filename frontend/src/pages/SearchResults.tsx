@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import Sidebar from '../components/layout/Sidebar';
-import TopBar from '../components/layout/TopBar';
+import AppShell from '../components/layout/AppShell';
 import SearchHeader from '../components/pages/search/SearchHeader';
 import SearchTabs from '../components/pages/search/SearchTabs';
 import RecipesResults from '../components/pages/search/RecipesResults';
@@ -11,28 +10,22 @@ export default function SearchResults() {
   return (
     <>
       <Helmet>
-        <title>Hasil Pencarian: Kencur | Penjamu Handal</title>
-        <meta name="description" content="Hasil pencarian untuk silinder obat dan aset produksi Penjamu Handal." />
+        <title>Hasil Pencarian | Penjamu Handal</title>
+        <meta name="description" content="Hasil pencarian untuk aset produksi Penjamu Handal." />
       </Helmet>
 
-      <div className="bg-background text-on-background min-h-screen overflow-x-hidden font-body flex">
-        <Sidebar className="hidden lg:flex" />
+      <AppShell>
+        <main className="p-4 sm:p-6 md:p-12 w-full max-w-[1200px] mx-auto pb-24 flex-1">
+          <SearchHeader />
+          <SearchTabs />
 
-        <div className="flex-1 lg:ml-72 flex flex-col w-full min-h-screen">
-          <TopBar />
-
-          <main className="p-6 md:p-12 w-full max-w-[1200px] mx-auto pb-24 flex-1">
-            <SearchHeader />
-            <SearchTabs />
-            
-            <div className="space-y-12">
-              <RecipesResults />
-              <InventoryResults />
-              <SuppliersResults />
-            </div>
-          </main>
-        </div>
-      </div>
+          <div className="space-y-12">
+            <RecipesResults />
+            <InventoryResults />
+            <SuppliersResults />
+          </div>
+        </main>
+      </AppShell>
     </>
   );
 }

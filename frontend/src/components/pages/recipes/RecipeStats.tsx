@@ -1,6 +1,6 @@
 export default function RecipeStats() {
   return (
-    <div className="mt-24 bg-surface-container-low rounded-[2rem] p-8 md:p-12 flex flex-col xl:flex-row gap-12 items-center shadow-sm">
+    <div className="mt-12 md:mt-24 bg-surface-container-low rounded-2xl md:rounded-[2rem] p-6 sm:p-8 md:p-12 flex flex-col xl:flex-row gap-8 md:gap-12 items-center shadow-sm">
       <div className="flex-1">
         <span className="text-secondary font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Optimasi Batch</span>
         <h2 className="text-3xl md:text-4xl font-extrabold text-primary mb-6 leading-tight font-headline">Kuasai analitik formula untuk potensi konsisten.</h2>

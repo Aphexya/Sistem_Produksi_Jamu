@@ -1,11 +1,13 @@
 import { Helmet } from 'react-helmet-async';
-import Sidebar from '../components/layout/Sidebar';
-import TopBar from '../components/layout/TopBar';
+import AppShell from '../components/layout/AppShell';
 import InventoryHeader from '../components/pages/inventory/InventoryHeader';
 import InventoryTable from '../components/pages/inventory/InventoryTable';
 import InventoryBento from '../components/pages/inventory/InventoryBento';
+import { useInventoryTable } from '../hooks/useInventoryTable';
 
 export default function Inventory() {
+  const inventory = useInventoryTable();
+
   return (
     <>
       <Helmet>
@@ -13,19 +15,58 @@ export default function Inventory() {
         <meta name="description" content="Manajemen stok bahan baku esensial untuk produksi Jamu." />
       </Helmet>
 
-      <div className="bg-surface text-on-surface min-h-screen overflow-x-hidden font-body flex">
-        <Sidebar />
-
-        <div className="flex-1 lg:ml-72 flex flex-col w-full">
-          <TopBar />
-
-          <main className="p-4 sm:p-8 space-y-6 max-w-350 w-full pb-20">
-            <InventoryHeader />
-            <InventoryTable />
-            <InventoryBento />
-          </main>
-        </div>
-      </div>
+      <AppShell>
+        <main className="mx-auto w-full max-w-[1400px] space-y-6 px-4 pb-20 pt-4 sm:px-6 md:px-10 lg:px-12">
+          <InventoryHeader
+            isFilterOpen={inventory.isFilterOpen}
+            categories={inventory.categoryOptions.filter(category => category !== 'all')}
+            filterCategory={inventory.filterCategory}
+            filterStatus={inventory.filterStatus}
+            onToggleFilter={() => inventory.setIsFilterOpen(prev => !prev)}
+            onCategoryChange={inventory.setFilterCategory}
+            onStatusChange={inventory.setFilterStatus}
+            onResetFilters={() => {
+              inventory.setFilterCategory('all');
+              inventory.setFilterStatus('all');
+            }}
+          />
+          <InventoryTable
+            isLoading={inventory.isLoading}
+            error={inventory.error instanceof Error ? inventory.error : null}
+            currentPageData={inventory.currentPageData}
+            currentPage={inventory.currentPage}
+            totalItems={inventory.totalItems}
+            totalPages={inventory.totalPages}
+            startIndex={inventory.startIndex}
+            endIndex={inventory.endIndex}
+            goToPage={inventory.goToPage}
+            goToPrevious={inventory.goToPrevious}
+            goToNext={inventory.goToNext}
+            onAddNew={inventory.openAddModal}
+            onEdit={inventory.openEditModal}
+            onRestock={inventory.handleRestock}
+            onDelete={inventory.handleDelete}
+            isModalOpen={inventory.isModalOpen}
+            modalMode={inventory.modalMode}
+            formData={inventory.formData}
+            isSavePending={inventory.mutationSave.isPending}
+            onFormChange={inventory.handleFormChange}
+            onSubmit={inventory.handleSubmit}
+            onCloseModal={inventory.closeModal}
+            confirmModal={inventory.confirmModal}
+            confirmDelete={inventory.confirmDelete}
+            cancelDelete={inventory.cancelDelete}
+            isDeletePending={inventory.mutationDelete.isPending}
+            restockModal={inventory.restockModal}
+            onRestockValueChange={(value) => inventory.setRestockModal({ ...inventory.restockModal, value })}
+            confirmRestock={inventory.confirmRestock}
+            cancelRestock={inventory.cancelRestock}
+            isRestockPending={inventory.mutationAdjust.isPending}
+            refetch={inventory.refetch}
+          />
+          <InventoryBento items={inventory.bahanData} />
+        </main>
+      </AppShell>
     </>
   );
 }

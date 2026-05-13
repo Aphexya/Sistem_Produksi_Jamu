@@ -1,8 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import Sidebar from '../components/layout/Sidebar';
-import TopBar from '../components/layout/TopBar';
+import AppShell from '../components/layout/AppShell';
+import { getRecipeImage } from '../components/pages/recipes/recipeImage';
+import Image from '../components/Image';
 
 interface Komposisi {
   id_rempah: number;
@@ -16,13 +17,17 @@ interface Khasiat {
   ket_khasiat: string | null;
 }
 
+interface Produsen {
+  nama_produsen: string;
+}
+
 interface JamuDetail {
   id_jamu: number;
   nama_jamu: string;
   ket_jamu: string | null;
   jenis: string | null;
   perizinan: string | null;
-  produsen: string | null;
+  produsen: Produsen | null;   // nested object dari Sequelize include
   komposisi: Komposisi[];
   khasiat: Khasiat[];
 }
@@ -33,8 +38,6 @@ async function fetchJamu(id: string): Promise<JamuDetail> {
   return res.json();
 }
 
-const HERO_IMG = 'https://images.unsplash.com/photo-1615486511484-92e172e27bda?q=80&w=1600&auto=format&fit=crop';
-
 export default function RecipeDetail() {
   const { id } = useParams<{ id: string }>();
   const { data: jamu, isLoading, error } = useQuery({
@@ -44,6 +47,7 @@ export default function RecipeDetail() {
   });
 
   const title = jamu ? `${jamu.nama_jamu} - Detail Resep | Penjamu Handal` : 'Detail Resep | Penjamu Handal';
+  const heroImage = jamu ? getRecipeImage(jamu.nama_jamu, jamu.jenis) : undefined;
 
   return (
     <>
@@ -52,13 +56,8 @@ export default function RecipeDetail() {
         <meta name="description" content={jamu?.ket_jamu ?? 'Detail resep dan komposisi produksi jamu.'} />
       </Helmet>
 
-      <div className="bg-background text-on-background min-h-screen overflow-x-hidden font-body flex">
-        <Sidebar className="hidden lg:flex" />
-
-        <div className="flex-1 lg:ml-72 flex flex-col w-full min-h-screen">
-          <TopBar />
-
-          <main className="p-6 md:p-12 w-full max-w-[1300px] mx-auto pb-24 flex-1">
+      <AppShell>
+        <main className="p-4 sm:p-6 md:p-10 lg:p-12 w-full max-w-[1300px] mx-auto pb-24">
 
             {/* Loading */}
             {isLoading && (
@@ -81,10 +80,15 @@ export default function RecipeDetail() {
             {!isLoading && !error && jamu && (
               <>
                 {/* Hero */}
-                <div className="relative w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden mb-10 shadow-sm">
-                  <img src={HERO_IMG} alt={jamu.nama_jamu} className="absolute inset-0 w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
-                  <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between">
+                <div className="relative w-full h-[260px] sm:h-[340px] md:h-[440px] rounded-2xl md:rounded-3xl overflow-hidden mb-6 md:mb-10 shadow-sm">
+                  <Image
+                    src={heroImage}
+                    alt={jamu.nama_jamu}
+                    fallbackSrc="/jamu.jpg"
+                    wrapperClassName="absolute inset-0"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+                  <div className="absolute inset-0 p-5 sm:p-8 md:p-12 flex flex-col justify-between">
                     <div>
                       <Link to="/recipes" className="inline-flex items-center gap-2 bg-surface/50 backdrop-blur-md px-4 py-2 rounded-xl text-on-surface hover:bg-surface transition-colors shadow-sm font-bold text-sm">
                         <span className="material-symbols-outlined text-[18px]">arrow_back</span>
@@ -104,10 +108,10 @@ export default function RecipeDetail() {
                           </span>
                         )}
                       </div>
-                      <h1 className="text-5xl md:text-6xl font-extrabold font-headline text-primary tracking-tight mb-4 drop-shadow-md capitalize">
+                      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-headline text-primary tracking-tight mb-3 drop-shadow-md capitalize">
                         {jamu.nama_jamu}
                       </h1>
-                      <p className="text-lg text-on-surface-variant font-medium leading-relaxed max-w-2xl drop-shadow-sm">
+                      <p className="text-sm sm:text-base md:text-lg text-on-surface-variant font-medium leading-relaxed max-w-2xl drop-shadow-sm line-clamp-3 md:line-clamp-none">
                         {jamu.ket_jamu ?? 'Tidak ada deskripsi tersedia.'}
                       </p>
                     </div>
@@ -115,12 +119,12 @@ export default function RecipeDetail() {
                 </div>
 
                 {/* Detail Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10">
                   {/* Kolom Kiri */}
                   <div className="lg:col-span-2 space-y-10">
 
                     {/* Komposisi */}
-                    <div className="bg-surface-container-lowest rounded-3xl p-8 border border-outline-variant/10 shadow-sm">
+                    <div className="bg-surface-container-lowest rounded-2xl md:rounded-3xl p-5 md:p-8 border border-outline-variant/10 shadow-sm">
                       <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center">
                           <span className="material-symbols-outlined">nutrition</span>
@@ -145,7 +149,7 @@ export default function RecipeDetail() {
                     </div>
 
                     {/* Khasiat */}
-                    <div className="bg-surface-container-lowest rounded-3xl p-8 border border-outline-variant/10 shadow-sm">
+                    <div className="bg-surface-container-lowest rounded-2xl md:rounded-3xl p-5 md:p-8 border border-outline-variant/10 shadow-sm">
                       <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-xl flex items-center justify-center">
                           <span className="material-symbols-outlined">healing</span>
@@ -171,9 +175,9 @@ export default function RecipeDetail() {
                     </div>
                   </div>
 
-                  {/* Kolom Kanan */}
-                  <div className="space-y-6">
-                    <div className="bg-primary/5 rounded-3xl p-6 border border-primary/10 shadow-sm relative overflow-hidden">
+                  {/* Kolom Kanan — sticky di desktop */}
+                  <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
+                    <div className="bg-primary/5 rounded-2xl md:rounded-3xl p-5 md:p-6 border border-primary/10 shadow-sm relative overflow-hidden">
                       <div className="absolute -bottom-10 -right-10 opacity-5 text-primary pointer-events-none">
                         <span className="material-symbols-outlined text-[150px]" style={{ fontVariationSettings: "'FILL' 1" }}>precision_manufacturing</span>
                       </div>
@@ -200,7 +204,7 @@ export default function RecipeDetail() {
                           <p className="text-xs font-bold text-on-surface-variant mb-1">Produsen</p>
                           <div className="flex items-center gap-2 text-primary font-bold">
                             <span className="material-symbols-outlined text-[18px]">factory</span>
-                            {jamu.produsen ?? '—'}
+                            {jamu.produsen?.nama_produsen ?? '—'}
                           </div>
                         </div>
                         <hr className="border-outline-variant/20" />
@@ -226,8 +230,7 @@ export default function RecipeDetail() {
               </>
             )}
           </main>
-        </div>
-      </div>
+      </AppShell>
     </>
   );
 }

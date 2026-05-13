@@ -1,108 +1,145 @@
-const staffMembers = [
-  {
-    id: 1,
-    initials: 'SK',
-    initialsClass: 'bg-tertiary-fixed text-on-tertiary-fixed-variant',
-    name: 'Siti Khadijah',
-    email: 'siti.k@penjamuhandal.com',
-    department: 'Jaminan Mutu (QA)',
-    accessLevel: 'SUPERVISOR',
-    accessClass: 'bg-primary-container/10 border-primary-container/20 text-primary',
-    lastActive: '2 menit lalu'
+import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { fetchUsers, type UserRecord, type UserRole } from '../../../services/userService';
+
+const roleMeta: Record<UserRole, { label: string; className: string }> = {
+  admin: {
+    label: 'ADMINISTRATOR',
+    className: 'bg-primary-container/10 border-primary-container/20 text-primary',
   },
-  {
-    id: 2,
-    initials: 'BR',
-    initialsClass: 'bg-secondary-fixed text-on-secondary-fixed-variant',
-    name: 'Budi Raharjo',
-    email: 'budi.r@penjamuhandal.com',
-    department: 'Departemen Ekstraksi',
-    accessLevel: 'TEKNISI',
-    accessClass: 'bg-surface-container-highest border-outline-variant/30 text-on-surface-variant',
-    lastActive: '1 jam lalu'
+  supervisor: {
+    label: 'SUPERVISOR',
+    className: 'bg-secondary-container/30 border-secondary/20 text-primary',
   },
-  {
-    id: 3,
-    initials: 'DI',
-    initialsClass: 'bg-primary-fixed text-on-primary-fixed-variant',
-    name: 'Dewi Indah',
-    email: 'dewi.i@penjamuhandal.com',
-    department: 'Pengemasan & Botolisasi',
-    accessLevel: 'STAF',
-    accessClass: 'bg-surface-container-highest border-outline-variant/30 text-on-surface-variant',
-    lastActive: 'Kemarin'
+  staff: {
+    label: 'STAF',
+    className: 'bg-surface-container-highest border-outline-variant/30 text-on-surface-variant',
+  },
+};
+
+function getInitials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join('');
+}
+
+function getRegisteredLabel(user: UserRecord) {
+  if (!user.created_at) {
+    return 'Tanggal belum tersedia';
   }
-];
+
+  return new Date(user.created_at).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
 
 export default function UserManagement() {
+  const {
+    data: users = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['users'],
+    queryFn: fetchUsers,
+  });
+
   return (
     <section className="space-y-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h3 className="text-2xl font-headline font-bold text-primary">Hierarki Staf Medis</h3>
-          <p className="text-on-surface-variant font-body text-sm mt-1">Kelola perizinan peran serta tingkat akses area laboratorium.</p>
+          <h3 className="font-headline text-2xl font-bold text-primary">Hierarki Staf Medis</h3>
+          <p className="mt-1 text-sm text-on-surface-variant">Kelola perizinan peran serta tingkat akses area laboratorium.</p>
         </div>
-        <button className="bg-surface text-primary border-2 border-primary/20 px-6 py-3 rounded-xl font-bold text-sm tracking-wide hover:bg-primary hover:text-on-primary hover:border-primary transition-all flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto">
-          <span className="material-symbols-outlined text-lg">person_add</span>
-          UNDANG STAF BARU
-        </button>
+        <Link
+          to="/users"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-primary/20 bg-surface px-6 py-3 text-sm font-bold tracking-wide text-primary shadow-sm transition-all hover:border-primary hover:bg-primary hover:text-on-primary sm:w-auto"
+        >
+          <span className="material-symbols-outlined text-lg">manage_accounts</span>
+          BUKA DIREKTORI STAF
+        </Link>
       </div>
 
-      <div className="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm border border-outline-variant/10">
+      <div className="overflow-hidden rounded-2xl border border-outline-variant/10 bg-surface-container-lowest shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-left min-w-[800px]">
+          <table className="w-full min-w-[800px] text-left">
             <thead>
-              <tr className="bg-surface-container-low border-b border-outline-variant/10">
+              <tr className="border-b border-outline-variant/10 bg-surface-container-low">
                 <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/80">Anggota Staf</th>
-                <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/80">Departemen</th>
+                <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/80">Wilayah</th>
                 <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/80">Tingkat Akses</th>
-                <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/80">Aktivitas Terakhir</th>
+                <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/80">Terdaftar</th>
                 <th className="px-8 py-5 text-right"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/5">
-              {staffMembers.map((staff) => (
-                <tr key={staff.id} className="hover:bg-surface-container-low/50 transition-colors group">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-extrabold shadow-sm ${staff.initialsClass}`}>
-                        {staff.initials}
-                      </div>
-                      <div>
-                        <p className="font-bold text-primary">{staff.name}</p>
-                        <p className="text-xs text-on-surface-variant/70 font-medium font-mono">{staff.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6 text-sm text-on-surface-variant font-medium">{staff.department}</td>
-                  <td className="px-8 py-6">
-                    <span className={`px-3 py-1.5 rounded text-[10px] sm:text-xs font-extrabold uppercase tracking-widest border ${staff.accessClass}`}>
-                      {staff.accessLevel}
-                    </span>
-                  </td>
-                  <td className="px-8 py-6 text-sm text-on-surface-variant font-medium">{staff.lastActive}</td>
-                  <td className="px-8 py-6 text-right">
-                    <button className="text-on-surface-variant/50 hover:text-primary p-2 bg-transparent hover:bg-surface-container rounded-lg transition-colors border border-transparent hover:border-outline-variant/20">
-                      <span className="material-symbols-outlined text-[20px]">edit</span>
-                    </button>
+              {isLoading && (
+                <tr>
+                  <td colSpan={5} className="px-8 py-12 text-center text-sm font-medium text-on-surface-variant">
+                    Memuat daftar staf...
                   </td>
                 </tr>
-              ))}
+              )}
+
+              {!isLoading && error && (
+                <tr>
+                  <td colSpan={5} className="px-8 py-12 text-center text-sm font-medium text-error">
+                    {error instanceof Error ? error.message : 'Gagal memuat daftar staf'}
+                  </td>
+                </tr>
+              )}
+
+              {!isLoading && !error && users.map((staff) => {
+                const role = roleMeta[staff.role];
+
+                return (
+                  <tr key={staff.id_user} className="group transition-colors hover:bg-surface-container-low/50">
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary font-extrabold text-on-primary shadow-sm">
+                          {getInitials(staff.username)}
+                        </div>
+                        <div>
+                          <p className="font-bold text-primary">{staff.username}</p>
+                          <p className="font-mono text-xs font-medium text-on-surface-variant/70">{staff.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6 text-sm font-medium text-on-surface-variant">
+                      {staff.kota?.nama_kota ?? 'Belum dipilih'}
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className={`rounded border px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-widest sm:text-xs ${role.className}`}>
+                        {role.label}
+                      </span>
+                    </td>
+                    <td className="px-8 py-6 text-sm font-medium text-on-surface-variant">{getRegisteredLabel(staff)}</td>
+                    <td className="px-8 py-6 text-right">
+                      <Link
+                        to="/users"
+                        className="inline-flex rounded-lg border border-transparent bg-transparent p-2 text-on-surface-variant/50 transition-colors hover:border-outline-variant/20 hover:bg-surface-container hover:text-primary"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">edit</span>
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
-        
-        {/* Table Footer Pagination */}
-        <div className="bg-surface-container-low/40 px-8 py-6 border-t border-outline-variant/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-on-surface-variant font-bold tracking-wide uppercase">Menampilkan 3 dari 12 Anggota Staf Aktif</p>
-          <div className="flex gap-2">
-            <button className="w-10 h-10 rounded-lg flex items-center justify-center bg-surface-container-lowest border border-outline-variant/20 hover:bg-primary hover:text-white transition-colors shadow-sm text-on-surface-variant">
-              <span className="material-symbols-outlined text-sm">chevron_left</span>
-            </button>
-            <button className="w-10 h-10 flex items-center justify-center bg-primary rounded-lg text-white shadow-md">
-              <span className="material-symbols-outlined text-sm">chevron_right</span>
-            </button>
-          </div>
+
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-outline-variant/10 bg-surface-container-low/40 px-8 py-6 sm:flex-row">
+          <p className="text-xs font-bold uppercase tracking-wide text-on-surface-variant">
+            Menampilkan {users.length} anggota staf aktif
+          </p>
+          <Link to="/users" className="text-sm font-bold text-primary hover:underline">
+            Kelola detail
+          </Link>
         </div>
       </div>
     </section>
